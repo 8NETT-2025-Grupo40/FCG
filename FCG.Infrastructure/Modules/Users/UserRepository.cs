@@ -8,14 +8,7 @@ namespace FCG.Infrastructure.Modules.Users
         {
             return Task.FromResult<IEnumerable<User>>(
             [
-                new User()
-                {
-                    Nome = "Mock1",
-                },
-                new User()
-                {
-                    Nome = "Mock2",
-                }
+                new User("NomeMock1", "mock@outlook.com", "Mock@1234", UserRole.Admin)
             ]);
         }
     }
