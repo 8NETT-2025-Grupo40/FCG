@@ -1,5 +1,13 @@
 using FCG.API.Setup;
+using FCG.Application.Modules.Login;
+using FCG.Application.Modules.TokenGenerators;
 using FCG.Application.Modules.Users;
+using FCG.Domain.Modules.Users;
+using FCG.Infrastructure;
+using FCG.Infrastructure.Modules.Tokens;
+using FCG.Infrastructure.Modules.Users;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +17,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.RegisterServices();
+
+//TODO: refatorar para Middleware específico??
+//Configuração de Conexão com banco
+builder.Services.AddDbContext<DbAppContext>(options => options.UseSqlServer(""));
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IJwtTokenGenerator>(jw => new JwtTokenGenerator("minhaChaveDeUmaClasseOuVault", "https://localhost:5001", "https://localhost:5001,https://api.localhost:5001"));
+builder.Services.AddScoped<ILoginAppServices, LoginAppServices>();
 
 var app = builder.Build();
 
@@ -27,5 +42,15 @@ app.MapGet("/users", async (IUserAppService userAppService) =>
     })
     .WithName("")
     .WithOpenApi();
+
+app.MapPost("/Login", async (ILoginAppServices loginAppServices, [FromBody] LoginRequestDto request) =>
+{
+    var result = await loginAppServices.LoginAppAsync(request);
+    if (!result.IsSuccess)
+        return Results.Unauthorized();
+
+    return Results.Ok(new { token = result.Token });
+})
+.WithOpenApi();
 
 app.Run();

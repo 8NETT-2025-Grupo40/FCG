@@ -18,5 +18,10 @@ namespace FCG.Infrastructure.Modules.Users
                 }
             ]);
         }
+
+        public Task<User> GetByUsernameAsync(string username)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
