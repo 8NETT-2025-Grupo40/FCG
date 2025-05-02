@@ -22,7 +22,7 @@ builder.Services.RegisterServices();
 //Configuração de Conexão com banco
 builder.Services.AddDbContext<DbAppContext>(options => options.UseSqlServer(""));
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IJwtTokenGenerator>(jw => new JwtTokenGenerator("minhaChaveDeUmaClasseOuVault", "https://localhost:5001", "https://localhost:5001,https://api.localhost:5001"));
+builder.Services.AddScoped<IJwtTokenGenerator>(jw => new JwtTokenGenerator("2RIaHoL7lp5g9jMlDQ1rA1pmoZnZhFM9r6H+Tpq+N9s=", "https://localhost:5001", "https://localhost:5001,https://api.localhost:5001"));
 builder.Services.AddScoped<ILoginAppServices, LoginAppServices>();
 
 var app = builder.Build();

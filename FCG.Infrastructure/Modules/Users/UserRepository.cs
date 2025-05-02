@@ -1,27 +1,47 @@
 ﻿using FCG.Domain.Modules.Users;
+using Microsoft.EntityFrameworkCore;
 
 namespace FCG.Infrastructure.Modules.Users
 {
     public class UserRepository : IUserRepository
     {
-        public Task<IEnumerable<User>> GetAll()
+        private readonly DbAppContext _appContext;
+
+        public UserRepository(DbAppContext appContext)
         {
-            return Task.FromResult<IEnumerable<User>>(
-            [
-                new User()
-                {
-                    Nome = "Mock1",
-                },
-                new User()
-                {
-                    Nome = "Mock2",
-                }
-            ]);
+            _appContext = appContext;
         }
 
-        public Task<User> GetByUsernameAsync(string username)
+        public Task<IEnumerable<User>> GetAll()
         {
-            throw new NotImplementedException();
+                var users = new List<User>
+                {
+                    new User
+                    (
+                        "user@fcg.com.br",
+                        "User1234",  
+                        "Mock2",
+                        "user@fcg.com.br",
+                        "A"
+                    ),
+                    new User
+                    (
+                        "user@fcg.com.br",
+                        "User1234",  
+                        "Mock2",
+                        "user@fcg.com.br",                        
+                        "A"
+                    )
+
+                };
+
+                return Task.FromResult<IEnumerable<User>>(users);
         }
+
+        public async Task<User> GetByUsernameAsync(string username)
+        {
+            return await Task.FromResult(new User("adm@fcg.com.br", "Administrador", "adm@fcg.com.br", "Adm1234", "A"));
+        }
+
     }
 }

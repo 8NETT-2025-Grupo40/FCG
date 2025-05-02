@@ -20,7 +20,7 @@ namespace FCG.Application.Modules.Login
         {
             var user = await _userRepository.GetByUsernameAsync(requestDto.UserName);
 
-            if (user == null || !user.IsValidPassword(requestDto.Password))
+            if (user == null || !user.CredentialsMatch(requestDto.Password))
                 return LoginAppResultDTO.Fail("Usuário ou senha inválidos");
 
             var token = _jwtTokenGenerator.GenerateToken(user);
