@@ -14,34 +14,10 @@ namespace FCG.Infrastructure.Modules.Users
 
         public Task<IEnumerable<User>> GetAll()
         {
-                var users = new List<User>
-                {
-                    new User
-                    (
-                        "user@fcg.com.br",
-                        "User1234",  
-                        "Mock2",
-                        "user@fcg.com.br",
-                        "A"
-                    ),
-                    new User
-                    (
-                        "user@fcg.com.br",
-                        "User1234",  
-                        "Mock2",
-                        "user@fcg.com.br",                        
-                        "A"
-                    )
-
-                };
-
-                return Task.FromResult<IEnumerable<User>>(users);
+            return Task.FromResult<IEnumerable<User>>(
+            [
+                new User("NomeMock1", "mock@outlook.com", "Mock@1234", UserRole.Admin)
+            ]);
         }
-
-        public async Task<User> GetByUsernameAsync(string username)
-        {
-            return await Task.FromResult(new User("adm@fcg.com.br", "Administrador", "adm@fcg.com.br", "Adm1234", "A"));
-        }
-
     }
 }

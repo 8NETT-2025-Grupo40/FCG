@@ -1,34 +1,23 @@
-﻿using FCG.Domain.Modules.BaseEntities;
+using FCG.Domain.Common;
 
-namespace FCG.Domain.Modules.Users
+namespace FCG.Domain.Modules.Users;
+
+public class User : BaseEntity
 {
-    public class User: BaseEntity
+    protected User() { }
+
+    public User(Name name, Email email, Password password, UserRole role)
     {
-        public User(string username, string nome, string email, string passwordHash, string status)
-        {
-            Username = username;
-            Nome = nome;
-            Email = email;
-            PasswordHash = passwordHash;
-            Status = status;
-        }
-
-        public string Username { get; set; }
-        public string Nome { get; set; }
-        public string Email { get; set; }
-        public string PasswordHash { get; set; }
-        
-
-
-        //Verifica se senha está válida
-        public bool IsValidPassword (string password) => PasswordHash != null && PasswordHash.Equals(password);
-        
-        //Verifica se usuário é ativo e senha válida, usado para authenticação
-        public bool CredentialsMatch(string rawPassword) => Status.Equals("A") && IsValidPassword(rawPassword);
-        
-        
-
-
-
+        Name = name;
+        Email = email;
+        Password = password;
+        Role = role;
+        CreateDate = DateTime.Now;
     }
+
+    public Name Name { get; private set; } = null!;
+    public Email Email { get; private set; } = null!;
+    public Password Password { get; private set; } = null!;
+    public UserRole Role { get; private set; }
+    public DateTime CreateDate { get; set; }
 }
