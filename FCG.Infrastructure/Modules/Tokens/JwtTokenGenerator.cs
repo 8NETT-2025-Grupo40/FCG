@@ -23,9 +23,11 @@ namespace FCG.Infrastructure.Modules.Tokens
 
         public string GenerateToken(User user)
         {
+            string email = user.Email.ToString();
+            
             var claims = new[]{
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim(JwtRegisteredClaimNames.Email, email),
                 new Claim("userId", user.Id.ToString()),
             };
 

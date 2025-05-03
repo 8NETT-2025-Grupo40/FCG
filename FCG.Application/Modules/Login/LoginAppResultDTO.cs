@@ -4,19 +4,20 @@ namespace FCG.Application.Modules.Login
     {
         public bool IsSuccess { get; set; }
         public string Token { get; set; }
-        public string message { get; set; }
+        public string Message { get; set; }
 
-        public static LoginAppResultDTO Success(string token){
+        public static LoginAppResultDTO Success(string token, string message){
             return new(){
                 IsSuccess = true,
-                Token = token
+                Token = token,
+                Message = message
             };
         }
 
         public static LoginAppResultDTO Fail(string message){
             return new(){ 
                 IsSuccess = false, 
-                message = message};
+                Message = message};
         }
     }
 }

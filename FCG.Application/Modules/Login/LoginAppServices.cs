@@ -25,7 +25,7 @@ namespace FCG.Application.Modules.Login
 
             var token = _jwtTokenGenerator.GenerateToken(user);
 
-            return LoginAppResultDTO.Success(token);
+            return LoginAppResultDTO.Success(token, "Autenticação com sucesso!");
         }
     }
 }

@@ -36,6 +36,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+//TODO: criar middleware para endpoints??
 app.MapGet("/users", async (IUserAppService userAppService) =>
     {
         return await userAppService.GetAll();
@@ -46,10 +47,12 @@ app.MapGet("/users", async (IUserAppService userAppService) =>
 app.MapPost("/Login", async (ILoginAppServices loginAppServices, [FromBody] LoginRequestDto request) =>
 {
     var result = await loginAppServices.LoginAppAsync(request);
-    if (!result.IsSuccess)
-        return Results.Unauthorized();
 
-    return Results.Ok(new { token = result.Token });
+    if (!result.IsSuccess)
+        return Results.Ok(result);
+
+    return Results.Ok(result);
+
 })
 .WithOpenApi();
 
