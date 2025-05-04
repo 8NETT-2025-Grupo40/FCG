@@ -1,5 +1,7 @@
+using FCG.API.Extensions;
 using FCG.API.Setup;
 using FCG.Application.Modules.Users;
+using FCG.Domain.Common;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,8 +11,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.RegisterServices();
+builder.Services.RegisterMiddlewares();
+
+builder.ConfigureApplicationInsights();
 
 var app = builder.Build();
+
+app.ConfigureMiddlewares();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -20,6 +27,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.MapGet("/games", async () =>
+{
+    throw new DomainException("Sample error message");
+});
 
 app.MapGet("/users", async (IUserAppService userAppService) =>
     {
