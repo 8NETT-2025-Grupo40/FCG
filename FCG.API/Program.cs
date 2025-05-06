@@ -24,12 +24,4 @@ app.ConfigureMiddlewares();
 app.MapUserEndpoints();
 app.MapAuthenticationEndpoints();
 
-app.MapGet("/admin", () =>
-{
-    return Results.Ok("Área restrita para Admins");
-})
-.WithName("GetAdminUsers")
-.WithOpenApi()
-.RequireAuthorization("AdminOnly");
-
 app.Run();

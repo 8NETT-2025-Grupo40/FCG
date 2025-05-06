@@ -14,12 +14,12 @@ public record Password
     {
         if (string.IsNullOrWhiteSpace(password))
         {
-            throw new DomainException("Senha é obrigatória.");
+            throw new DomainException("Password is required.");
         }
 
         if (!IsPasswordValid(password))
         {
-            throw new DomainException("Senha deve ter no mínimo 8 caracteres, letras, números e caracteres especiais.");
+            throw new DomainException("Password must have at least 8 characters, letters, numbers and special characters.");
         }
 
         HashPassword = ToHashPassword(password);

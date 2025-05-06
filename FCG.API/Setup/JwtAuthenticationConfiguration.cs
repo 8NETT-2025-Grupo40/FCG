@@ -17,7 +17,7 @@ public static class JwtAuthenticationConfiguration
         if (string.IsNullOrWhiteSpace(secret) || string.IsNullOrWhiteSpace(issuer) || string.IsNullOrWhiteSpace(audience))
         {
             Log.Error("Could find JWT information, authorization and authentication will not be configured");
-            throw new InvalidOperationException("O Secret JWT não foi configurado corretamente.");
+            throw new InvalidOperationException("Secret JWT is not configured correctly.");
         }
 
         services.AddScoped<IJwtTokenGenerator>(_ => new JwtTokenGenerator(secret, issuer, audience));
@@ -46,7 +46,7 @@ public static class JwtAuthenticationConfiguration
                     },
                     OnTokenValidated = context =>
                     {
-                        Console.WriteLine("TOKEN VALIDADO");
+                        Console.WriteLine("TOKEN VALID");
                         return Task.CompletedTask;
                     }
                 };

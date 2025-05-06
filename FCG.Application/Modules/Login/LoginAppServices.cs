@@ -21,11 +21,11 @@ namespace FCG.Application.Modules.Login
             var user = await _userRepository.GetByUsernameAsync(requestDto.UserName, cancellationToken);
 
             if (user == null || !user.CredentialsMatch(requestDto.Password))
-                return LoginAppResultDTO.Fail("Usuário ou senha inválidos");
+                return LoginAppResultDTO.Fail("Invalid username or password");
 
             var token = _jwtTokenGenerator.GenerateToken(user);
 
-            return LoginAppResultDTO.Success(token, "Autenticação com sucesso!");
+            return LoginAppResultDTO.Success(token, "Authentication successful");
         }
     }
 }

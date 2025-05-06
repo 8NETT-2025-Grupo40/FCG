@@ -11,12 +11,12 @@ public record Email
     {
         if (string.IsNullOrWhiteSpace(address))
         {
-            throw new DomainException("E-mail é obrigatório.");
+            throw new DomainException("E-mail is required.");
         }
 
         if (!IsEmailFormatValid(address))
         {
-            throw new DomainException("Formato de e-mail inválido.");
+            throw new DomainException("Format of e-mail invalid.");
         }
 
         Address = address;

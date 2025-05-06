@@ -10,7 +10,7 @@ public record Name
     {
         if (string.IsNullOrWhiteSpace(value))
         {
-            throw new DomainException("Nome é obrigatório.");
+            throw new DomainException("Name is required.");
         }
 
         Value = value.Trim();

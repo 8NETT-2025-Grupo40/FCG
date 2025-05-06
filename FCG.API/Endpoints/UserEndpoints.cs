@@ -1,4 +1,5 @@
 ﻿using FCG.Application.Modules.Users;
+using FCG.Domain.Modules.Users;
 using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace FCG.API.Endpoints;
@@ -7,17 +8,28 @@ public static class UserEndpoints
 {
     public static void MapUserEndpoints(this IEndpointRouteBuilder app)
     {
-        RouteGroupBuilder group = app
+        RouteGroupBuilder userGroup = app
             .MapGroup("/users")
             .WithTags("User");
 
-        group.MapGet("/", GetAllUsers)
-            .WithName("GetAllUsers");
+        userGroup.MapPost("/", CreateUser);
 
-        group.MapPost("/", CreateUser);
+        userGroup.MapGet("/{id:guid}", GetUserById)
+            .WithName("GetUserById")
+            .RequireAuthorization();
 
-        group.MapGet("/{id:guid}", GetUserById)
-            .WithName("GetUserById");
+        RouteGroupBuilder adminGroup = userGroup
+            .MapGroup("/admin")
+            .RequireAuthorization("AdminOnly")
+            // Hoje não existe muitos endpoints exclusivos de User para role Admin, mas o dia que existir, considerar colocar WithTags("Admin")
+            .WithTags("User");
+
+        adminGroup.MapGet("/", GetAllUsers)
+            .WithName("GetAllUsers")
+            .WithSummary("Lists all registered users.");
+
+        adminGroup.MapPost("/", CreateAdminUser)
+            .WithName("CreateAdminUser");
     }
 
     private static async Task<Ok<IEnumerable<UserResponse>>> GetAllUsers(
@@ -33,7 +45,7 @@ public static class UserEndpoints
         IUserAppService service,
         CancellationToken cancellationToken)
     {
-        Guid id = await service.CreateUserAsync(request, cancellationToken);
+        Guid id = await service.CreateUserAsync(request, UserRole.User, cancellationToken);
         return TypedResults.CreatedAtRoute(nameof(GetUserById), routeValues: new { id });
     }
 
@@ -47,5 +59,14 @@ public static class UserEndpoints
         return user is not null
             ? TypedResults.Ok(user)
             : TypedResults.NotFound();
+    }
+
+    private static async Task<CreatedAtRoute> CreateAdminUser(
+        CreateUserRequest request,
+        IUserAppService service,
+        CancellationToken cancellationToken)
+    {
+        Guid id = await service.CreateUserAsync(request, UserRole.Admin, cancellationToken);
+        return TypedResults.CreatedAtRoute(nameof(GetUserById), new { id });
     }
 }
