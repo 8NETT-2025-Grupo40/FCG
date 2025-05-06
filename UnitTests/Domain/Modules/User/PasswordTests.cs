@@ -19,7 +19,7 @@ public class PasswordTests
     public void CreatePassword_PasswordIsNullOrEmpty_ShouldThrow(string invalidPassword)
     {
         DomainException ex = Assert.Throws<DomainException>(() => new Password(invalidPassword));
-        Assert.Equal("Senha é obrigatória.", ex.Message);
+        Assert.Equal("Password is required.", ex.Message);
     }
 
     [Theory]
@@ -30,6 +30,6 @@ public class PasswordTests
     public void CreatePassword_PasswordIsInvalid_ShouldThrow(string invalidPassword)
     {
         DomainException ex = Assert.Throws<DomainException>(() => new Password(invalidPassword));
-        Assert.Equal("Senha deve ter no mínimo 8 caracteres, letras, números e caracteres especiais.", ex.Message);
+        Assert.Equal("Password must have at least 8 characters, letters, numbers and special characters.", ex.Message);
     }
 }

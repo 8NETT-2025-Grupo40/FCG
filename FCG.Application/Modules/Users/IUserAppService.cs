@@ -9,7 +9,7 @@ public interface IUserAppService
     /// <summary>
     /// Método responsável por criar um usuário.
     /// </summary>
-    Task<Guid> CreateUserAsync(CreateUserRequest request, CancellationToken cancellationToken);
+    Task<Guid> CreateUserAsync(CreateUserRequest request, UserRole role, CancellationToken cancellationToken);
 
     /// <summary>
     /// Método responsável por obter um usuário pelo seu ID.

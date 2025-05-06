@@ -8,8 +8,8 @@ public class NameTests
     [Fact]
     public void CreateName_ValidName()
     {
-        Name name = new("Anderson");
-        Assert.Equal("Anderson", name.Value);
+        Name name = new("NomeTeste");
+        Assert.Equal("NomeTeste", name.Value);
     }
 
     [Theory]
@@ -19,6 +19,6 @@ public class NameTests
     public void CreateName_NameIsNullOrEmpty_ShouldThrowException(string invalidName)
     {
         DomainException ex = Assert.Throws<DomainException>(() => new Name(invalidName));
-        Assert.Equal("Nome é obrigatório.", ex.Message);
+        Assert.Equal("Name is required.", ex.Message);
     }
 }
