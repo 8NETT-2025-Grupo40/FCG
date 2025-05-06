@@ -1,5 +1,7 @@
 ﻿using FCG.Application.Modules.Users;
+using FCG.Domain.Common;
 using FCG.Domain.Modules.Users;
+using FCG.Infrastructure;
 using FCG.Infrastructure.Modules.Users;
 
 namespace FCG.API.Setup
@@ -11,6 +13,9 @@ namespace FCG.API.Setup
             // Users
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserAppService, UserAppService>();
+
+            // Common
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
     }
 }

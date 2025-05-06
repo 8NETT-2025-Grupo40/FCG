@@ -1,15 +1,15 @@
 ﻿using FCG.Domain.Common;
 using FCG.Domain.Modules.Users;
 
-namespace UnitTests.User;
+namespace UnitTests.Users;
 
 public class NameTests
 {
     [Fact]
     public void CreateName_ValidName()
     {
-        Name name = new("Anderson");
-        Assert.Equal("Anderson", name.Value);
+        Name name = new("NomeTeste");
+        Assert.Equal("NomeTeste", name.Value);
     }
 
     [Theory]
