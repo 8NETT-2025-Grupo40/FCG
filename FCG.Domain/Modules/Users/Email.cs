@@ -5,18 +5,18 @@ namespace FCG.Domain.Modules.Users;
 
 public record Email
 {
-    public string Address { get; }
+    public string Address { get; } = null!;
 
     public Email(string address)
     {
         if (string.IsNullOrWhiteSpace(address))
         {
-            throw new DomainException("E-mail é obrigatório.");
+            throw new DomainException("E-mail is required.");
         }
 
         if (!IsEmailFormatValid(address))
         {
-            throw new DomainException("Formato de e-mail inválido.");
+            throw new DomainException("Format of e-mail invalid.");
         }
 
         Address = address;

@@ -19,13 +19,18 @@ namespace FCG.Application.Modules.Users
                 Id = u.Id,
                 Email = u.Email.ToString(),
                 Role = u.Role.ToString(),
-                CreateDate = u.CreateDate,
+                CreateDate = u.DateCreated,
             });
         }
 
-        public async Task<Guid> CreateUserAsync(CreateUserRequest request, CancellationToken cancellationToken)
+        public async Task<Guid> CreateUserAsync(CreateUserRequest request, UserRole role, CancellationToken cancellationToken)
         {
-            User user = new(request.Name, request.Email, request.Password, UserRole.User, BaseStatus.Active);
+            if (await this._unitOfWork.UserRepository.ExistsByEmailAsync(request.Email, cancellationToken))
+            {
+                throw new DomainException("E-mail already in use.");
+            }
+
+            User user = new(request.Name, request.Email, request.Password, role, BaseStatus.Active);
 
             await this._unitOfWork.UserRepository.AddAsync(user, cancellationToken);
             await this._unitOfWork.CommitAsync(cancellationToken);
@@ -47,7 +52,7 @@ namespace FCG.Application.Modules.Users
                 Id = user.Id,
                 Email = user.Email.ToString(),
                 Role = user.Role.ToString(),
-                CreateDate = user.CreateDate
+                CreateDate = user.DateCreated
             };
         }
     }

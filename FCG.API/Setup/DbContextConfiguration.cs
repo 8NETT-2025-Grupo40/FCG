@@ -17,7 +17,6 @@ public static class DbContextConfiguration
             }
 
             options.UseSqlServer(connectionString);
-
         }, ServiceLifetime.Scoped);
     }
 }

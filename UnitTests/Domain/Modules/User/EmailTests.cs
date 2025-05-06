@@ -19,7 +19,7 @@ public class EmailTests
     public void CreateEmail_EmailIsNullOrEmpty_ShouldThrowException(string invalidEmail)
     {
         DomainException ex = Assert.Throws<DomainException>(() => new Email(invalidEmail));
-        Assert.Equal("E-mail é obrigatório.", ex.Message);
+        Assert.Equal("E-mail is required.", ex.Message);
     }
 
     [Theory]
@@ -31,6 +31,6 @@ public class EmailTests
     public void CreateEmail_EmailFormatIsInvalid_ShouldThrowException(string invalidEmail)
     {
         DomainException ex = Assert.Throws<DomainException>(() => new Email(invalidEmail));
-        Assert.Equal("Formato de e-mail inválido.", ex.Message);
+        Assert.Equal("Format of e-mail invalid.", ex.Message);
     }
 }

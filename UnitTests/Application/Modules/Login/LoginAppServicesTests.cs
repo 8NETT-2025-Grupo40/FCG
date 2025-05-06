@@ -25,18 +25,18 @@ namespace UnitTests.Application.Modules.Login
         public async Task OnLoginAppAsync_WhenUserIsNotFound_ShouldReturnFailedResultWithCorrectValues()
         {
             // Arrange
-            const string userName = "username";
+            const string email = "user@fcg.com";
             const string password = "password";
-            const string expectedMessage = "Usuário ou senha inválidos";
+            const string expectedMessage = "Invalid username or password";
 
             var cancellationToken = CancellationToken.None;
 
-            _userRepository.GetByUsernameAsync(userName, cancellationToken).ReturnsNull();
+            _userRepository.GetByEmailAsync(email, cancellationToken).ReturnsNull();
 
             var loginRequest = new LoginRequestDto
             {
                 Password = password,
-                UserName = userName,
+                Email = email,
             };
 
             var expectedResult = LoginAppResultDTO.Fail(expectedMessage);
@@ -53,7 +53,7 @@ namespace UnitTests.Application.Modules.Login
         public async Task OnLoginAppAsync_WhenUserIsFoundAndCredentialsAreCorrect_Should()
         {
             // Arrange
-            const string expectedMessage = "Usuário ou senha inválidos";
+            const string expectedMessage = "Invalid username or password";
             const string sampleName = "sampleName";
             const string sampleEmail = "sample@email.com";
             const string sampleStrongPassword = "strongPassword1@";
@@ -65,14 +65,14 @@ namespace UnitTests.Application.Modules.Login
             var email = new Email(sampleEmail);
             var password = new Password(sampleStrongPassword);
 
-            var user = new User(name, email, password, UserRole.User, FCG.Domain.Common.BaseStatus.Active);
+            var user = new User(name, email, password, UserRole.StandardUser, FCG.Domain.Common.BaseStatus.Active);
 
-            _userRepository.GetByUsernameAsync(sampleName, cancellationToken).Returns(user);
+            _userRepository.GetByEmailAsync(sampleName, cancellationToken).Returns(user);
 
             var loginRequest = new LoginRequestDto
             {
                 Password = incorrectPassword,
-                UserName = sampleName,
+                Email = sampleEmail,
             };
 
             var expectedResult = LoginAppResultDTO.Fail(expectedMessage);
@@ -89,7 +89,7 @@ namespace UnitTests.Application.Modules.Login
         public async Task OnLoginAppAsync_WhenUserIsFoundAndCredentialsAreCorrect_ShouldReturnSucessWithCorrectToken()
         {
             // Arrange
-            const string expectedMessage = "Autenticação com sucesso!";
+            const string expectedMessage = "Authentication successful";
             const string expectedToken = "token";
             const string sampleName = "sampleName";
             const string sampleEmail = "sample@email.com";
@@ -101,14 +101,14 @@ namespace UnitTests.Application.Modules.Login
             var email = new Email(sampleEmail);
             var password = new Password(sampleStrongPassword);
 
-            var user = new User(name, email, password, UserRole.User, FCG.Domain.Common.BaseStatus.Active);
+            var user = new User(name, email, password, UserRole.StandardUser, FCG.Domain.Common.BaseStatus.Active);
 
-            _userRepository.GetByUsernameAsync(sampleName, cancellationToken).Returns(user);
+            _userRepository.GetByEmailAsync(sampleEmail, cancellationToken).Returns(user);
 
             var loginRequest = new LoginRequestDto
             {
                 Password = sampleStrongPassword,
-                UserName = sampleName,
+                Email = sampleEmail,
             };
 
             _jwtTokenGenerator.GenerateToken(user).Returns(expectedToken);

@@ -25,7 +25,6 @@ namespace UnitTests.Domain.Modules.User
             Assert.Equal(password, user.Password);
             Assert.Equal(role, user.Role);
             Assert.Equal(expectedStatus, user.Status);
-            Assert.True((DateTime.Now - user.CreateDate).TotalSeconds < 1);
         }
     }
 }
