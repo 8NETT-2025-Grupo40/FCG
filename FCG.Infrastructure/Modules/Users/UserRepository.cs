@@ -1,9 +1,14 @@
 ﻿using FCG.Domain.Modules.Users;
+using FCG.Infrastructure.Common;
 
 namespace FCG.Infrastructure.Modules.Users
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository : EFRepository<User>, IUserRepository
     {
+        public UserRepository(ApplicationDbContext context) : base(context)
+        {
+        }
+
         public Task<IEnumerable<User>> GetAll()
         {
             return Task.FromResult<IEnumerable<User>>(

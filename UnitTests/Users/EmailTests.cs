@@ -1,7 +1,7 @@
 ﻿using FCG.Domain.Common;
 using FCG.Domain.Modules.Users;
 
-namespace UnitTests.User;
+namespace UnitTests.Users;
 
 public class EmailTests
 {
