@@ -10,8 +10,9 @@ public class GlobalErrorHandlingMiddleware : IMiddleware
         }
         catch (Exception e)
         {
+            const string contentType = "application/json";
             var response = context.Response;
-            response.ContentType = "application/json";
+            response.ContentType = contentType;
             response.StatusCode = 500;
             await response.WriteAsync(e.Message);
         }
