@@ -85,7 +85,7 @@ builder.Services.AddAuthentication("Bearer")
             ValidateIssuerSigningKey = true,
             ValidIssuer = Issuer,
             ValidAudience = Audience,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret)),
+            IssuerSigningKey = new SymmetricSecurityKey(Convert.FromBase64String(secret)),
             RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
         };
 
@@ -142,8 +142,8 @@ app.MapGet("/users", async  (IUserAppService userAppService) =>
         return await userAppService.GetAll();
     })
     .WithName("")
-    .WithOpenApi()
-    .RequireAuthorization("UserOnly", "AdminOnly");
+    .WithOpenApi();
+
 
 app.MapPost("/Login", async (ILoginAppServices loginAppServices, [FromBody] LoginRequestDto request) =>
 {
@@ -163,47 +163,6 @@ app.MapGet("/admin", () =>
 })
 .WithName("GetAdminUsers")
 .WithOpenApi()
-.RequireAuthorization("UserOnly", "AdminOnly");
-
-app.MapGet("/debug-token", (HttpRequest request) =>
-{
-    var authHeader = request.Headers["Authorization"].ToString();
-    return Results.Ok(new { TokenRecebido = authHeader });
-});
-
-app.MapGet("/auth-test", (ClaimsPrincipal user) =>
-{
-    return Results.Ok(new
-    {
-        IsAuthenticated = user.Identity?.IsAuthenticated,
-        Role = user.FindFirst("http://schemas.microsoft.com/ws/2008/06/identity/claims/role")?.Value,
-        Claims = user.Claims.Select(c => new { c.Type, c.Value })
-    });
-}).RequireAuthorization();
-
-app.MapGet("/generate-token", () =>
-{
-    var claims = new[]
-    {
-        new Claim(JwtRegisteredClaimNames.Sub, Guid.NewGuid().ToString()),
-        new Claim(JwtRegisteredClaimNames.Email, "mock@outlook.com"),
-        new Claim("userId", Guid.NewGuid().ToString()),
-        new Claim("http://schemas.microsoft.com/ws/2008/06/identity/claims/role", "Admin")
-    };
-
-    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("2RIaHoL7lp5g9jMlDQ1rA1pmoZnZhFM9r6H+Tpq+N9s=")); // Substitua pela sua
-    var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-    var token = new JwtSecurityToken(
-        issuer: "http://localhost:5001",
-        audience: "http://localhost:5001",
-        claims: claims,
-        expires: DateTime.UtcNow.AddMinutes(60),
-        signingCredentials: creds
-    );
-
-    var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
-    return Results.Ok(tokenString);
-});
-
+.RequireAuthorization("AdminOnly");
 
 app.Run();
