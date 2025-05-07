@@ -1,5 +1,4 @@
-﻿using FCG.Domain.Entity;
-using FCG.Domain.Modules.Users;
+﻿using FCG.Domain.Modules.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace FCG.Infrastructure
@@ -15,7 +14,7 @@ namespace FCG.Infrastructure
             _connectionString = connectionString;
         }
         
-        public DbSet<UserEntity> User { get; set; }
+        public DbSet<User> User { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

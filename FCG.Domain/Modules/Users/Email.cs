@@ -42,4 +42,6 @@ public record Email
 
         return Regex.IsMatch(address, $"^{localPartPattern}@{domainPattern}\\.{topLevelDomainPattern}$", RegexOptions.IgnoreCase);
     }
+
+    protected Email() { }
 }

@@ -1,49 +1,34 @@
-﻿using FCG.Domain.Entity;
-using FCG.Domain.Modules.Users;
+﻿using FCG.Domain.Modules.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Data;
 
 namespace FCG.Infrastructure.Modules.Configurations
 {
-    public class UserConfiguration : IEntityTypeConfiguration<UserEntity>
+    public class UserConfiguration : IEntityTypeConfiguration<User>
     {
-        public void Configure(EntityTypeBuilder<UserEntity> builder)
+        public void Configure(EntityTypeBuilder<User> builder)
         {
             builder.ToTable("User");
             builder.HasKey(e => e.Id);
-            builder.Property(p => p.Id).HasColumnType("UNIQUEIDENTIFIER").IsRequired();
-            builder.Property(p => p.Name).HasColumnType("NVARCHAR(100)").IsRequired();
-            builder.Property(p => p.Email).HasColumnType("NVARCHAR(150)").IsRequired();
-            builder.Property(p => p.Password).HasColumnType("VARCHAR(88)").IsRequired();
-            builder.Property(p => p.Role).HasColumnType("INT").IsRequired();
-            builder.Property(p => p.CreateDate).HasColumnType("DATETIME2").IsRequired();
-            builder.HasData(ReturnAdmUser(), ReturnCommonUser());
-        }
-
-        private UserEntity ReturnAdmUser()
-        {
-            return new UserEntity()
+            builder.Property(p => p.Id).IsRequired();
+            builder.Property(p => p.Role).IsRequired();
+            builder.Property(p => p.CreateDate).IsRequired();
+            builder.OwnsOne(o => o.Name, name =>
             {
-                Id = Guid.NewGuid(),
-                Name = "Usuario Adm",
-                CreateDate = new DateTime(2025, 5, 7),
-                Email = "adm@fcg.com",
-                Password = "H9i6kZgxyPZ0F4t0a9XxUt8zRMNCwdzktYlJv8EYaWg=",
-                Role = 1
-            };
-        }
-        
-        private UserEntity ReturnCommonUser()
-        {
-            return new UserEntity()
+                name.Property(p => p.Value).HasMaxLength(100).HasColumnName("Name").IsRequired();
+                name.WithOwner();
+            });
+            builder.OwnsOne(u => u.Email, email =>
             {
-                Id = Guid.NewGuid(),
-                Name = "Usuario Comum",
-                CreateDate = new DateTime(2025, 5, 7),
-                Email = "usr@fcg.com",
-                Password = "FEYtYdA4Pp8nOH6mFGLwFxOX2XGBGmUQW9n+Ot8BHzA=",
-                Role = 0
-            };
+                email.Property(p => p.Address).HasMaxLength(150).HasColumnName("Email").IsRequired();
+                email.WithOwner();
+            });
+            builder.OwnsOne(u => u.Password, password =>
+            {
+                password.Property(p => p.HashPassword).HasMaxLength(88).HasColumnName("Password").IsRequired();
+                password.WithOwner();
+            });
         }
     }
 }
