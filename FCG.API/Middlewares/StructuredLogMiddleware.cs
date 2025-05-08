@@ -3,10 +3,8 @@ using FCG.API.Models;
 
 namespace FCG.API.Middlewares;
 
-public class StructuredLogMiddleware(ILoggerFactory loggerFactory) : IMiddleware
+public class StructuredLogMiddleware(ILogger<StructuredLogMiddleware> logger) : IMiddleware
 {
-    private readonly ILogger _logger = loggerFactory.CreateLogger("Logging");
-
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         var originalResponseBody = context.Response.Body;
@@ -27,7 +25,7 @@ public class StructuredLogMiddleware(ILoggerFactory loggerFactory) : IMiddleware
                 memoryStreamResponseBody.Seek(0, SeekOrigin.Begin);
                 await memoryStreamResponseBody.CopyToAsync(originalResponseBody);
                 log.TransformIntoSuccessfulLog(context.Response.StatusCode);
-                _logger.LogInformation(log.ToString());
+                logger.LogInformation("{Log}", log);
                 return;
             }
             
@@ -37,7 +35,7 @@ public class StructuredLogMiddleware(ILoggerFactory loggerFactory) : IMiddleware
             
             log.TransformIntoErrorLog(errorMessage, context.Response.StatusCode);
             
-            _logger.LogInformation(log.ToString());
+            logger.LogError("{Log}", log);
             
             memoryStreamResponseBody.Seek(0, SeekOrigin.Begin);
 
