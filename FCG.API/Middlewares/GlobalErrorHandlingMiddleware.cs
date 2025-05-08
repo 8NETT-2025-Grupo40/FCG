@@ -1,3 +1,5 @@
+using FCG.Domain.Common;
+
 namespace FCG.API.Middlewares;
 
 public class GlobalErrorHandlingMiddleware : IMiddleware
@@ -8,13 +10,22 @@ public class GlobalErrorHandlingMiddleware : IMiddleware
         {
             await next(context);
         }
-        catch (Exception e)
+        catch (DomainException domainException)
         {
-            const string contentType = "application/json";
-            var response = context.Response;
-            response.ContentType = contentType;
-            response.StatusCode = 500;
-            await response.WriteAsync(e.Message);
+            await HandleErrorAsync(context, 422, domainException.Message);
         }
+        catch (Exception exception)
+        {
+            await HandleErrorAsync(context, 500, exception.Message);
+        }
+    }
+
+    private static async ValueTask HandleErrorAsync(HttpContext context, int httpStatusCode, string exceptionMessage)
+    {
+        const string contentType = "application/json";
+        var response = context.Response;
+        response.ContentType = contentType;
+        response.StatusCode = httpStatusCode;
+        await response.WriteAsync(exceptionMessage);
     }
 }
