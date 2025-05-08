@@ -19,23 +19,5 @@ namespace FCG.API.Setup
             services.AddTransient<StructuredLogMiddleware>();
             services.AddTransient<GlobalErrorHandlingMiddleware>();
         }
-        
-        public static IHostApplicationBuilder ConfigureApplicationInsights(this IHostApplicationBuilder builder)
-        {
-            const string applicationInsightConnectionStringKey = "ApplicationInsightsConnectionString";
-            const string applicationCategory = "FIAP Cloud Games";
-            
-#if RELEASE
-            builder.Logging.AddApplicationInsights(
-                configureTelemetryConfiguration: (config) => 
-                    config.ConnectionString = builder.Configuration.GetConnectionString(applicationInsightConnectionStringKey),
-                configureApplicationInsightsLoggerOptions: (_) => { }
-            );
-
-            builder.Logging.AddFilter<ApplicationInsightsLoggerProvider>(applicationCategory, LogLevel.Error);
-#endif
-            
-            return builder;
-        }
     }
 }
