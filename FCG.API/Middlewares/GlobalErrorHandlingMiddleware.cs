@@ -1,3 +1,4 @@
+using System.Text.Json;
 using FCG.Domain.Common;
 
 namespace FCG.API.Middlewares;
@@ -26,6 +27,6 @@ public class GlobalErrorHandlingMiddleware : IMiddleware
         var response = context.Response;
         response.ContentType = contentType;
         response.StatusCode = httpStatusCode;
-        await response.WriteAsync(exceptionMessage);
+        await response.WriteAsync(JsonSerializer.Serialize(exceptionMessage));
     }
 }
