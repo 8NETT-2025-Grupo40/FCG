@@ -1,4 +1,4 @@
-namespace FCG.API.Models;
+namespace FCG.API.Models.Enums;
 
 public enum FcgLogLevel
 {

@@ -1,5 +1,6 @@
 using System.Globalization;
 using FCG.API.Models;
+using FCG.API.Models.Enums;
 
 namespace FCG.API.Extensions;
 
