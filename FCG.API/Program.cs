@@ -4,17 +4,13 @@ using FCG.Application.Modules.TokenGenerators;
 using FCG.Application.Modules.Users;
 using FCG.Domain.Modules.Users;
 using FCG.Infrastructure;
-using System.Text;
 using FCG.Infrastructure.Modules.Tokens;
 using FCG.Infrastructure.Modules.Users;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.OpenApi.Models;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using System.IdentityModel.Tokens.Jwt;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +24,10 @@ if (string.IsNullOrEmpty(secret))
 var Issuer = builder.Configuration["JWT:Issuer"];
 var Audience = builder.Configuration["JWT:Audience"];;
 
+
+var configuration = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json")
+    .Build();
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -68,7 +68,6 @@ builder.Services.RegisterServices();
 
 //TODO: refatorar para Middleware específico??
 //Configuração de Conexão com banco
-builder.Services.AddDbContext<DbAppContext>(options => options.UseSqlServer(""));
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IJwtTokenGenerator>(jw => new JwtTokenGenerator(secret, Issuer, Audience));
 builder.Services.AddScoped<ILoginAppServices, LoginAppServices>();
@@ -110,6 +109,11 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("UserOnly", policy => policy.RequireRole("User"));
 });
 
+
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+{
+    options.UseSqlServer(configuration.GetConnectionString("ConnectionString"));
+}, ServiceLifetime.Scoped);
 
 var app = builder.Build();
 

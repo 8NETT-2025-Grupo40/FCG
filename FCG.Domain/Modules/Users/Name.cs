@@ -22,4 +22,6 @@ public record Name
     {
         return new Name(name);
     }
+
+    protected Name() { }
 }

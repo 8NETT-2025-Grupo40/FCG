@@ -5,9 +5,9 @@ namespace FCG.Infrastructure.Modules.Users
 {
     public class UserRepository : IUserRepository
     {
-        private readonly DbAppContext _appContext;
+        private readonly ApplicationDbContext _appContext;
 
-        public UserRepository(DbAppContext appContext)
+        public UserRepository(ApplicationDbContext appContext)
         {
             _appContext = appContext;
         }
