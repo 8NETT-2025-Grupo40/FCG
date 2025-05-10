@@ -50,4 +50,6 @@ public record Password
 
         return hasMinimumLength && hasDigit && hasLetter && hasSpecialChar;
     }
+
+    protected Password() { }
 }
