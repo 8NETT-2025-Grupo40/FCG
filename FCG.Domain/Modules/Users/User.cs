@@ -6,7 +6,7 @@ public class User : BaseEntity
 {
     protected User() { }
 
-    public User(Name name, Email email, Password password, UserRole role, string status)
+    public User(Name name, Email email, Password password, UserRole role, BaseStatus status)
     {
         Name = name;
         Email = email;
@@ -26,7 +26,7 @@ public class User : BaseEntity
     public bool IsValidPassword (string password) => Password != null && Password.Equals(password);
     
     //Verifica se usuário é ativo e senha válida, usado para authenticação
-    public bool CredentialsMatch(string rawPassword) => Status.Equals("A") && IsValidPassword(rawPassword);
+    public bool CredentialsMatch(string rawPassword) => Status.Equals(BaseStatus.Active) && IsValidPassword(rawPassword);
     
     
 }

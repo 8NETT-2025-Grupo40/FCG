@@ -1,4 +1,5 @@
-﻿using FCG.Domain.Modules.Users;
+﻿using FCG.Domain.Common;
+using FCG.Domain.Modules.Users;
 
 
 namespace FCG.Infrastructure.Modules.Users
@@ -16,13 +17,13 @@ namespace FCG.Infrastructure.Modules.Users
         {
             return Task.FromResult<IEnumerable<User>>(
             [
-                new User("NomeMock1", "mock@outlook.com", "Mock@1234", UserRole.Admin, "A")
+                new User("NomeMock1", "mock@outlook.com", "Mock@1234", UserRole.Admin, BaseStatus.Active)
             ]);
         }
 
         public Task<User> GetByUsernameAsync(string username)
         {
-            return Task.FromResult(new User("NomeMock1", "mock@outlook.com", "Mock@1234", UserRole.Admin, "A"));
+            return Task.FromResult(new User("NomeMock1", "mock@outlook.com", "Mock@1234", UserRole.Admin, BaseStatus.Active));
         }
     }
 }
