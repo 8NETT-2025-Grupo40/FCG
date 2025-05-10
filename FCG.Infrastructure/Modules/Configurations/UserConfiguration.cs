@@ -1,7 +1,6 @@
 ﻿using FCG.Domain.Modules.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System.Data;
 
 namespace FCG.Infrastructure.Modules.Configurations
 {
@@ -13,6 +12,7 @@ namespace FCG.Infrastructure.Modules.Configurations
             builder.HasKey(e => e.Id);
             builder.Property(p => p.Id).IsRequired();
             builder.Property(p => p.Role).IsRequired();
+            builder.Property(p => p.Status).IsRequired();
             builder.Property(p => p.CreateDate).IsRequired();
             builder.OwnsOne(o => o.Name, name =>
             {
