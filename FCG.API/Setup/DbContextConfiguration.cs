@@ -1,6 +1,5 @@
 ﻿using FCG.Infrastructure;
 using Microsoft.EntityFrameworkCore;
-using Serilog;
 
 namespace FCG.API.Setup;
 
@@ -12,13 +11,9 @@ public static class DbContextConfiguration
         {
             string? connectionString = configuration.GetConnectionString("DefaultConnection");
 
-            if (string.IsNullOrWhiteSpace(connectionString) is false)
+            if (string.IsNullOrWhiteSpace(connectionString))
             {
-                options.UseSqlServer(connectionString);
-            }
-            else
-            {
-                Log.Error("Could find connection string, database will not be configured");
+                throw new InvalidOperationException("Could find connection string, database will not be configured");
             }
 
         }, ServiceLifetime.Scoped);
