@@ -4,5 +4,15 @@ namespace FCG.Application.Modules.Users;
 
 public interface IUserAppService
 {
-    Task<IEnumerable<User>> GetAll();
+    Task<IEnumerable<UserResponse>> GetAll(CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Método responsável por criar um usuário.
+    /// </summary>
+    Task<Guid> CreateUserAsync(CreateUserRequest request, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Método responsável por obter um usuário pelo seu ID.
+    /// </summary>
+    Task<UserResponse?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
 }

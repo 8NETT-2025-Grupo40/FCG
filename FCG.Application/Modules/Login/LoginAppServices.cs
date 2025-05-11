@@ -16,9 +16,9 @@ namespace FCG.Application.Modules.Login
             _jwtTokenGenerator = jwtTokenGenerator;
         }
 
-        public async Task<LoginAppResultDTO> LoginAppAsync(LoginRequestDto requestDto)
+        public async Task<LoginAppResultDTO> LoginAppAsync(LoginRequestDto requestDto, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetByUsernameAsync(requestDto.UserName);
+            var user = await _userRepository.GetByUsernameAsync(requestDto.UserName, cancellationToken);
 
             if (user == null || !user.CredentialsMatch(requestDto.Password))
                 return LoginAppResultDTO.Fail("Usuário ou senha inválidos");

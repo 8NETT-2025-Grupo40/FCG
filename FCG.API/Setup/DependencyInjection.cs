@@ -1,7 +1,9 @@
 ﻿using FCG.API.Middlewares;
 using FCG.Application.Modules.Login;
 using FCG.Application.Modules.Users;
+using FCG.Domain.Common;
 using FCG.Domain.Modules.Users;
+using FCG.Infrastructure;
 using FCG.Infrastructure.Modules.Users;
 
 namespace FCG.API.Setup;
@@ -16,6 +18,8 @@ public static class DependencyInjection
 
         //Login
         services.AddScoped<ILoginAppServices, LoginAppServices>();
+
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
     }
 
     public static void RegisterMiddlewares(this IServiceCollection services)
