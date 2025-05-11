@@ -18,7 +18,7 @@ public class GlobalErrorHandlingMiddleware(ILogger logger) : IMiddleware
         }
         catch (Exception exception)
         {
-            logger.LogError("There was an error while processing the request: {ExceptionMessage}", exception.Message);
+            logger.LogCritical("There was an error while processing the request: {ExceptionMessage}", exception.Message);
             await HandleErrorAsync(context, 500, exception.Message);
         }
 
