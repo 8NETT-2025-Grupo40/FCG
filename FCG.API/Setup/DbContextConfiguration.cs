@@ -16,6 +16,8 @@ public static class DbContextConfiguration
                 throw new InvalidOperationException("Could find connection string, database will not be configured");
             }
 
+            options.UseSqlServer(connectionString);
+
         }, ServiceLifetime.Scoped);
     }
 }
