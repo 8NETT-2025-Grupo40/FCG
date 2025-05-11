@@ -35,7 +35,7 @@ builder.ConfigureSerilog();
 
 //TODO: refatorar para Middleware específico??
 
-if (string.IsNullOrWhiteSpace(Issuer) is false &&
+if (string.IsNullOrWhiteSpace(Issuer) is false ||
     string.IsNullOrWhiteSpace(Audience) is false)
 {
     builder.Services.ConfigureJwt(secret, Issuer, Audience);
