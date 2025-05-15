@@ -1,4 +1,5 @@
-﻿using FCG.Domain.Modules.Users;
+﻿using FCG.Domain.Common;
+using FCG.Domain.Modules.Users;
 
 namespace UnitTests.User
 {
@@ -8,7 +9,7 @@ namespace UnitTests.User
         public void CreateUser_ShouldInitializePropertiesCorrectly()
         {
             // Arrange
-            const string expectedStatus = "active";
+            const BaseStatus expectedStatus = BaseStatus.Active;
             Name name = new("João");
             Email email = new("joão@example.com");
             Password password = new("SenhaValida@123");

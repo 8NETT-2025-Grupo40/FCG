@@ -1,4 +1,5 @@
-﻿using FCG.Domain.Modules.Users;
+﻿using FCG.Domain.Common;
+using FCG.Domain.Modules.Users;
 using FCG.Infrastructure.Common;
 using Microsoft.EntityFrameworkCore;
 

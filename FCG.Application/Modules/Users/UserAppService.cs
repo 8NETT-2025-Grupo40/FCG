@@ -25,7 +25,7 @@ namespace FCG.Application.Modules.Users
 
         public async Task<Guid> CreateUserAsync(CreateUserRequest request, CancellationToken cancellationToken)
         {
-            User user = new(request.Name, request.Email, request.Password, UserRole.User, "A");
+            User user = new(request.Name, request.Email, request.Password, UserRole.User, BaseStatus.Active);
 
             await this._unitOfWork.UserRepository.AddAsync(user, cancellationToken);
             await this._unitOfWork.CommitAsync(cancellationToken);
