@@ -1,29 +1,30 @@
 ﻿using FCG.Domain.Common;
 using FCG.Domain.Modules.Users;
+using FCG.Infrastructure.Common;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace FCG.Infrastructure.Modules.Users
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository : EFRepository<User>, IUserRepository
     {
         private readonly ApplicationDbContext _appContext;
 
-        public UserRepository(ApplicationDbContext appContext)
+        public UserRepository(ApplicationDbContext appContext) : base(appContext)
         {
             _appContext = appContext;
         }
 
-        public Task<IEnumerable<User>> GetAll()
+        public async Task<IEnumerable<User>> GetAllAsync(CancellationToken cancellationToken)
         {
-            return Task.FromResult<IEnumerable<User>>(
-            [
-                new User("NomeMock1", "mock@outlook.com", "Mock@1234", UserRole.Admin, BaseStatus.Active)
-            ]);
+            return await this.DbSet
+                .ToListAsync(cancellationToken);
         }
 
-        public Task<User> GetByUsernameAsync(string username)
+        public async Task<User?> GetByUsernameAsync(string username, CancellationToken cancellationToken)
         {
-            return Task.FromResult(new User("NomeMock1", "mock@outlook.com", "Mock@1234", UserRole.Admin, BaseStatus.Active));
+            return await this.DbSet
+                .FirstOrDefaultAsync(u => u.Name.Value == username, cancellationToken);
         }
     }
 }
