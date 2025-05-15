@@ -3,7 +3,7 @@ using FCG.Application.Modules.Login;
 using Microsoft.AspNetCore.Http.HttpResults;
 using NSubstitute;
 
-namespace UnitTests.Endpoints
+namespace UnitTests.API.Endpoints
 {
 
     public class AuthenticationEndpointsTests

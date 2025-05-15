@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 using NSubstitute;
 using UnitTests.Extensions;
 
-namespace UnitTests.Middlewares;
+namespace UnitTests.API.Middlewares;
 
 public class GlobalErrorHandlingMiddlewareTests
 {
