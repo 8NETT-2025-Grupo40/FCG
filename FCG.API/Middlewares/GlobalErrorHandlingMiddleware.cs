@@ -3,7 +3,7 @@ using System.Text.Json;
 
 namespace FCG.API.Middlewares;
 
-public class GlobalErrorHandlingMiddleware(ILogger logger) : IMiddleware
+public class GlobalErrorHandlingMiddleware(ILogger<GlobalErrorHandlingMiddleware> logger) : IMiddleware
 {
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
