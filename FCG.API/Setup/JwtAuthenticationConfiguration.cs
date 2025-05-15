@@ -1,4 +1,5 @@
 ﻿using FCG.Application.Modules.TokenGenerators;
+using FCG.Domain.Modules.Users;
 using FCG.Infrastructure.Modules.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -54,8 +55,17 @@ public static class JwtAuthenticationConfiguration
 
         services.AddAuthorization(options =>
         {
-            options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
-            options.AddPolicy("UserOnly", policy => policy.RequireRole("User"));
+            options.AddPolicy(PolicyNames.AdminOnly, policy => policy.RequireRole(nameof(UserRole.Admin)));
+            options.AddPolicy(PolicyNames.UserOnly, policy => policy.RequireRole(nameof(UserRole.StandardUser)));
         });
     }
+}
+
+/// <summary>
+/// Nome das Policies, para autorização.
+/// </summary>
+public static class PolicyNames
+{
+    public const string AdminOnly = nameof(AdminOnly);
+    public const string UserOnly = nameof(UserOnly);
 }

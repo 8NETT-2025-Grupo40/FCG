@@ -1,6 +1,8 @@
-﻿using FCG.Application.Modules.Users;
+﻿using FCG.API.Setup;
+using FCG.Application.Modules.Users;
 using FCG.Domain.Modules.Users;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FCG.API.Endpoints;
 
@@ -21,7 +23,7 @@ public static class UserEndpoints
 
         RouteGroupBuilder adminGroup = userGroup
             .MapGroup("/admin")
-            .RequireAuthorization("AdminOnly")
+            .RequireAuthorization(PolicyNames.AdminOnly)
             // Hoje não existe muitos endpoints exclusivos de User para role Admin, mas o dia que existir, considerar colocar WithTags("Admin")
             .WithTags("User");
 
@@ -43,7 +45,7 @@ public static class UserEndpoints
     }
 
     private static async Task<CreatedAtRoute> CreateUser(
-        CreateUserRequest request,
+        [FromBody] CreateUserRequest request,
         IUserAppService service,
         CancellationToken cancellationToken)
     {
@@ -64,7 +66,7 @@ public static class UserEndpoints
     }
 
     private static async Task<CreatedAtRoute> CreateAdminUser(
-        CreateUserRequest request,
+        [FromBody] CreateUserRequest request,
         IUserAppService service,
         CancellationToken cancellationToken)
     {
