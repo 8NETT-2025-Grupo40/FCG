@@ -18,7 +18,7 @@ namespace FCG.Application.Modules.Login
 
         public async Task<LoginAppResultDTO> LoginAppAsync(LoginRequestDto requestDto, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetByUsernameAsync(requestDto.UserName, cancellationToken);
+            var user = await _userRepository.GetByEmailAsync(requestDto.Email, cancellationToken);
 
             if (user == null || !user.CredentialsMatch(requestDto.Password))
                 return LoginAppResultDTO.Fail("Invalid username or password");

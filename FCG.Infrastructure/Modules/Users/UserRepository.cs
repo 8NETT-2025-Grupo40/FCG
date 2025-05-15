@@ -20,10 +20,10 @@ namespace FCG.Infrastructure.Modules.Users
                 .ToListAsync(cancellationToken);
         }
 
-        public async Task<User?> GetByUsernameAsync(string username, CancellationToken cancellationToken)
+        public async Task<User?> GetByEmailAsync(string email, CancellationToken cancellationToken)
         {
             return await this.DbSet
-                .FirstOrDefaultAsync(u => u.Name.Value == username, cancellationToken);
+                .FirstOrDefaultAsync(u => u.Email.Address == email, cancellationToken);
         }
 
         public async Task<bool> ExistsByEmailAsync(Email email, CancellationToken cancellationToken)
