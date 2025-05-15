@@ -20,13 +20,6 @@ public static class WebApplicationExtensions
         app.UseAuthentication();
         app.UseAuthorization();
 
-        app.Use(async (context, next) =>
-        {
-            var token = context.Request.Headers["Authorization"].ToString();
-            Console.WriteLine("Token recebido: " + token);
-            await next();
-        });
-
         return app;
     }
 

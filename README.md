@@ -1,8 +1,65 @@
-# FCG
+# FCG – FIAP Cloud Games
 
-# EF Core
-## Migração Inicial
-- Para executar a primeira migração, criando a tabela de usuário, é necessário executar o comando
+## Visão Geral  
 
-Update-Database FirstMigration -StartupProject FCG.Infrastructure -Connection "Server={ServerName};Database={DBName};Trusted_Connection=True;TrustServerCertificate=True"
+O FCG (FIAP Cloud Games) é uma plataforma RESTful desenvolvido em .NET 8 para venda e gestão de jogos digitais, além da gestão de servidores de jogos. A API oferece entre outras funcionalidades:
 
+- **Cadastro e autenticação de usuários** via JWT, com controle de papéis (usuário e administrador);
+- **Arquitetura modular e foco em DDD** para facilitar evolução  
+- **(em desenvolvimento) Gerenciamento de biblioteca**: registro e consulta dos jogos adquiridos  
+- **(em desenvolvimento) Administração**: CRUD de jogos e promoções para administradores  
+- **(em desenvolvimento) Gestão de servidores de partidas** como base para futuros módulos  
+
+O projeto é acadêmico, da instituição de ensino FIAP, turma 8NETT no curso de Pós Tech de Arquitetura de Sistema .NET, grupo 40.
+
+### Contribuidores:
+- [Luciano Castilho](https://github.com/lcastilho)
+- [Anderson Mori](https://github.com/AndersonMori)
+- [Ricardo Cavati](https://github.com/RicardoKromerCavati)
+- [Gustavo Coelho](https://github.com/GustavoCoelho1705)
+
+## Tecnologias  
+- .NET 8
+- C#
+- Entity Framework Core
+- System.IdentityModel.Tokens.Jwt (JWT)
+- Serilog
+- Swagger
+- xUnit + NSubstitute
+
+## Pré-requisitos  
+- .NET 8 SDK
+- SQL Server
+
+## Instalação e configuração  
+No arquivo appsettings.Development.json em FCG.API, substitua:
+```
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server={ServerName};Database={DBName};Trusted_Connection=True;TrustServerCertificate=True"
+  }
+}
+```
+
+### Migration
+Para executar a primeira migration, existem 2 opções:
+1. (Recomendado para ambiente de desenvolvimento) Executar o sistema com o profile **https with ApplyMigration**
+    - dotnet run --project FCG.API --launch-profile "https with ApplyMigration"
+2. Executar no Package Manager Console: Update-Database {MigrationName} -StartupProject FCG.API -Connection "Server={ServerName};Database={DBName};Trusted_Connection=True;TrustServerCertificate=True"
+
+### Swagger
+Ao subir a aplicação, a aplicação se encontra nas urls:
+- `https://localhost:7137/index.html`
+- `http://localhost:5264/index.html`
+
+### Uso inicial
+Por se tratar de um projeto acadêmico, disponibilizamos as credenciais do usuário administrador inserido via migrations, para facilitar o uso inicial do sistema nas operações que exigem o nível de acesso de Administrador. Ele tem as seguintes credenciais:
+
+```
+{
+  "email": "adm@fcg.com",
+  "password": "Adm1234@"
+}
+```
+
+Basta utilizá-la no `POST` /authentication/login

@@ -13,7 +13,7 @@ public abstract class BaseEntityConfiguration<TEntity> : IEntityTypeConfiguratio
         builder.Property(p => p.Id).IsRequired();
 
         builder.Property(p => p.DateCreated).IsRequired();
-        builder.Property(p => p.DateUpdated).IsRequired();
+        builder.Property(p => p.DateUpdated);
         builder.Property(p => p.Status).IsRequired();
     }
 }
