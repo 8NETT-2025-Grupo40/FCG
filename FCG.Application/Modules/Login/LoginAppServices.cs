@@ -16,16 +16,16 @@ namespace FCG.Application.Modules.Login
             _jwtTokenGenerator = jwtTokenGenerator;
         }
 
-        public async Task<LoginAppResultDTO> LoginAppAsync(LoginRequestDto requestDto, CancellationToken cancellationToken)
+        public async Task<LoginResponse> LoginAppAsync(LoginRequest request, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetByEmailAsync(requestDto.Email, cancellationToken);
+            var user = await _userRepository.GetByEmailAsync(request.Email, cancellationToken);
 
-            if (user == null || !user.CredentialsMatch(requestDto.Password))
-                return LoginAppResultDTO.Fail("Invalid username or password");
+            if (user == null || !user.CredentialsMatch(request.Password))
+                return LoginResponse.Fail("Invalid email or password");
 
             var token = _jwtTokenGenerator.GenerateToken(user);
 
-            return LoginAppResultDTO.Success(token, "Authentication successful");
+            return LoginResponse.Success(token, "Authentication successful");
         }
     }
 }

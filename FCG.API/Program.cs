@@ -26,5 +26,6 @@ app.ConfigureMiddlewares();
 // Endpoints
 app.MapUserEndpoints();
 app.MapAuthenticationEndpoints();
+app.MapGameEndpoints();
 
 app.Run();

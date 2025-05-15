@@ -23,17 +23,17 @@ namespace UnitTests.API.Endpoints
             const string sampleToken = "sampleToken";
             const int expectedStatusCode = 200;
 
-            var loginResult = new LoginAppResultDTO() { IsSuccess = true, Message = sampleResponseMessage, Token = sampleToken };
+            var loginResult = new LoginResponse() { IsSuccess = true, Message = sampleResponseMessage, Token = sampleToken };
 
-            _loginAppServices.LoginAppAsync(Arg.Any<LoginRequestDto>(), Arg.Any<CancellationToken>()).Returns(Task.FromResult(loginResult));
+            _loginAppServices.LoginAppAsync(Arg.Any<LoginRequest>(), Arg.Any<CancellationToken>()).Returns(Task.FromResult(loginResult));
 
-            var loginRequestDto = new LoginRequestDto();
+            var loginRequest = new LoginRequest();
             var cancellationToken = CancellationToken.None;
 
             // Act
-            var result = await AuthenticationEndpoints.Login(_loginAppServices, loginRequestDto, cancellationToken);
+            var result = await AuthenticationEndpoints.Login(_loginAppServices, loginRequest, cancellationToken);
 
-            var resultValue = result.Result as Ok<LoginAppResultDTO>;
+            var resultValue = result.Result as Ok<LoginResponse>;
 
             // Assert
             Assert.NotNull(resultValue);
@@ -49,15 +49,15 @@ namespace UnitTests.API.Endpoints
             // Arrange
             const int expectedStatusCode = 401;
 
-            var loginResult = new LoginAppResultDTO() { IsSuccess = false };
+            var loginResult = new LoginResponse() { IsSuccess = false };
 
-            _loginAppServices.LoginAppAsync(Arg.Any<LoginRequestDto>(), Arg.Any<CancellationToken>()).Returns(Task.FromResult(loginResult));
+            _loginAppServices.LoginAppAsync(Arg.Any<LoginRequest>(), Arg.Any<CancellationToken>()).Returns(Task.FromResult(loginResult));
 
-            var loginRequestDto = new LoginRequestDto();
+            var loginRequest = new LoginRequest();
             var cancellationToken = CancellationToken.None;
 
             // Act
-            var result = await AuthenticationEndpoints.Login(_loginAppServices, loginRequestDto, cancellationToken);
+            var result = await AuthenticationEndpoints.Login(_loginAppServices, loginRequest, cancellationToken);
 
             var resultValue = result.Result as UnauthorizedHttpResult;
 

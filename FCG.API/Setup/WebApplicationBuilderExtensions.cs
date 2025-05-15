@@ -10,7 +10,7 @@ public static class WebApplicationBuilderExtensions
         {
             configuration.ReadFrom.Configuration(context.Configuration);
         });
-            
+
         return builder;
     }
 }

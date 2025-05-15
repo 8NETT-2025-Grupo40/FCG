@@ -27,19 +27,19 @@ namespace UnitTests.Application.Modules.Login
             // Arrange
             const string email = "user@fcg.com";
             const string password = "password";
-            const string expectedMessage = "Invalid username or password";
+            const string expectedMessage = "Invalid email or password";
 
             var cancellationToken = CancellationToken.None;
 
             _userRepository.GetByEmailAsync(email, cancellationToken).ReturnsNull();
 
-            var loginRequest = new LoginRequestDto
+            var loginRequest = new LoginRequest
             {
                 Password = password,
                 Email = email,
             };
 
-            var expectedResult = LoginAppResultDTO.Fail(expectedMessage);
+            var expectedResult = LoginResponse.Fail(expectedMessage);
 
             // Act
             var result = await _loginAppServices.LoginAppAsync(loginRequest, cancellationToken);
@@ -53,7 +53,7 @@ namespace UnitTests.Application.Modules.Login
         public async Task OnLoginAppAsync_WhenUserIsFoundAndCredentialsAreCorrect_Should()
         {
             // Arrange
-            const string expectedMessage = "Invalid username or password";
+            const string expectedMessage = "Invalid email or password";
             const string sampleName = "sampleName";
             const string sampleEmail = "sample@email.com";
             const string sampleStrongPassword = "strongPassword1@";
@@ -69,13 +69,13 @@ namespace UnitTests.Application.Modules.Login
 
             _userRepository.GetByEmailAsync(sampleName, cancellationToken).Returns(user);
 
-            var loginRequest = new LoginRequestDto
+            var loginRequest = new LoginRequest
             {
                 Password = incorrectPassword,
                 Email = sampleEmail,
             };
 
-            var expectedResult = LoginAppResultDTO.Fail(expectedMessage);
+            var expectedResult = LoginResponse.Fail(expectedMessage);
 
             // Act
             var result = await _loginAppServices.LoginAppAsync(loginRequest, cancellationToken);
@@ -105,7 +105,7 @@ namespace UnitTests.Application.Modules.Login
 
             _userRepository.GetByEmailAsync(sampleEmail, cancellationToken).Returns(user);
 
-            var loginRequest = new LoginRequestDto
+            var loginRequest = new LoginRequest
             {
                 Password = sampleStrongPassword,
                 Email = sampleEmail,
@@ -113,7 +113,7 @@ namespace UnitTests.Application.Modules.Login
 
             _jwtTokenGenerator.GenerateToken(user).Returns(expectedToken);
 
-            var expectedResult = LoginAppResultDTO.Success(expectedToken, expectedMessage);
+            var expectedResult = LoginResponse.Success(expectedToken, expectedMessage);
 
             // Act
             var result = await _loginAppServices.LoginAppAsync(loginRequest, cancellationToken);

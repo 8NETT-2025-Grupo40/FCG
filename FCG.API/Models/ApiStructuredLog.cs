@@ -16,27 +16,27 @@ public class ApiStructuredLog(string endpoint)
 
     [JsonPropertyName("Response status code")]
     public string ResponseStatusCode { get; set; } = string.Empty;
-    
+
     [JsonPropertyName("Log level")]
     public string LogLevel { get; set; } = string.Empty;
-    
+
     [JsonPropertyName("Request start time")]
     public string RequestStartTime { get; set; } = string.Empty;
-    
+
     [JsonPropertyName("Request end time")]
     public string RequestEndTime { get; set; } = string.Empty;
-    
+
     [JsonPropertyName("Elapsed milliseconds to process request")]
     public string ElapsedTime { get; set; } = string.Empty;
-    
+
     [JsonPropertyName("Information message")]
     public string InformationMessage { get; set; } = string.Empty;
-    
+
     [JsonPropertyName("Error message")]
     public string ErrorMessage { get; set; } = string.Empty;
-    
+
     private readonly JsonSerializerOptions _jsonSerializerOptions = new() { WriteIndented = true };
 
-    public override string ToString() => 
+    public override string ToString() =>
         JsonSerializer.Serialize(this, _jsonSerializerOptions);
 }
