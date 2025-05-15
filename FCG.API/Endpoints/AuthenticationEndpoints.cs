@@ -22,10 +22,8 @@ public static class AuthenticationEndpoints
     {
         LoginAppResultDTO result = await loginAppServices.LoginAppAsync(request, cancellationToken);
 
-        if (result.IsSuccess is false)
-        {
+        if (!result.IsSuccess)
             return TypedResults.Unauthorized();
-        }
 
         return TypedResults.Ok(result);
     }
