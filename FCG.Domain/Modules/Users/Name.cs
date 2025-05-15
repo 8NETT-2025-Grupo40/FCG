@@ -4,7 +4,7 @@ namespace FCG.Domain.Modules.Users;
 
 public record Name
 {
-    public string Value { get; } = string.Empty;
+    public string Value { get; } = null!;
 
     public Name(string value)
     {

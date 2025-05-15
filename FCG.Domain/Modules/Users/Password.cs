@@ -8,7 +8,7 @@ public record Password
 {
     private const int MinimumLength = 8;
 
-    public string HashPassword { get; } = string.Empty;
+    public string HashPassword { get; } = null!;
 
     public Password(string password)
     {

@@ -86,5 +86,38 @@ public class UserAppServiceTests
 
             await this._unitOfWorkMock.Received(1).CommitAsync(cancellationToken);
         }
+
+        [Fact]
+        public async Task CreateUser_ButEmailExists_ShouldThrow()
+        {
+            // Arrange
+            var request = new CreateUserRequest
+            {
+                Name = "User email existing",
+                Email = "existing@example.com",
+                Password = "Password123@"
+            };
+
+            var cancellationToken = CancellationToken.None;
+
+            this._userRepositoryMock
+                .ExistsByEmailAsync(Arg.Is<Email>(e => e.Address == request.Email), cancellationToken)
+                .Returns(true);
+
+            // Act & Assert
+            var ex = await Assert.ThrowsAsync<DomainException>(() =>
+                this._userAppService.CreateUserAsync(request, UserRole.User, cancellationToken));
+
+            Assert.Equal("E-mail already in use.", ex.Message);
+
+            await this._userRepositoryMock.Received(1)
+                .ExistsByEmailAsync(Arg.Is<Email>(e => e.Address == request.Email), cancellationToken);
+
+            await this._userRepositoryMock.DidNotReceive()
+                .AddAsync(Arg.Any<User>(), cancellationToken);
+
+            await this._unitOfWorkMock.DidNotReceive()
+                .CommitAsync(cancellationToken);
+        }
     }
 }

@@ -21,6 +21,7 @@ public class UserConfiguration : BaseEntityConfiguration<User>
         builder.OwnsOne(u => u.Email, email =>
         {
             email.Property(p => p.Address).HasMaxLength(150).HasColumnName("Email").IsRequired();
+            email.HasIndex(e => e.Address).IsUnique();
             email.WithOwner();
         });
         builder.OwnsOne(u => u.Password, password =>

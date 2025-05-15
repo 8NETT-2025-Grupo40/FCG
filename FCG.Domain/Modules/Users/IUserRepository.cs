@@ -6,5 +6,6 @@ namespace FCG.Domain.Modules.Users
     {
         Task<User?> GetByUsernameAsync(string username, CancellationToken cancellationToken);
         Task<IEnumerable<User>> GetAllAsync(CancellationToken cancellationToken);
+        Task<bool> ExistsByEmailAsync(Email email, CancellationToken cancellationToken);
     }
 }

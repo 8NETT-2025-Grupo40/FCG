@@ -5,7 +5,7 @@ namespace FCG.Domain.Modules.Users;
 
 public record Email
 {
-    public string Address { get; } = string.Empty;
+    public string Address { get; } = null!;
 
     public Email(string address)
     {

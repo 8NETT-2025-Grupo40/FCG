@@ -1,5 +1,4 @@
-﻿using FCG.Domain.Common;
-using FCG.Domain.Modules.Users;
+﻿using FCG.Domain.Modules.Users;
 using FCG.Infrastructure.Common;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,6 +24,12 @@ namespace FCG.Infrastructure.Modules.Users
         {
             return await this.DbSet
                 .FirstOrDefaultAsync(u => u.Name.Value == username, cancellationToken);
+        }
+
+        public async Task<bool> ExistsByEmailAsync(Email email, CancellationToken cancellationToken)
+        {
+            return await this.DbSet
+                .AnyAsync(u => u.Email.Address == email.Address, cancellationToken);
         }
     }
 }

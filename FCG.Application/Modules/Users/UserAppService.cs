@@ -25,6 +25,11 @@ namespace FCG.Application.Modules.Users
 
         public async Task<Guid> CreateUserAsync(CreateUserRequest request, UserRole role, CancellationToken cancellationToken)
         {
+            if (await this._unitOfWork.UserRepository.ExistsByEmailAsync(request.Email, cancellationToken))
+            {
+                throw new DomainException("E-mail already in use.");
+            }
+
             User user = new(request.Name, request.Email, request.Password, role, BaseStatus.Active);
 
             await this._unitOfWork.UserRepository.AddAsync(user, cancellationToken);
