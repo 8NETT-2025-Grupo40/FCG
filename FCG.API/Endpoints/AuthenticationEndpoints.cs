@@ -15,15 +15,17 @@ public static class AuthenticationEndpoints
         group.MapPost("/Login", Login);
     }
 
-    private static async Task<Results<Ok<LoginAppResultDTO>, UnauthorizedHttpResult>> Login(
+    internal static async Task<Results<Ok<LoginAppResultDTO>, UnauthorizedHttpResult>> Login(
         ILoginAppServices loginAppServices,
         [FromBody] LoginRequestDto request,
         CancellationToken cancellationToken)
     {
         LoginAppResultDTO result = await loginAppServices.LoginAppAsync(request, cancellationToken);
 
-        if (!result.IsSuccess)
+        if (result.IsSuccess is false)
+        {
             return TypedResults.Unauthorized();
+        }
 
         return TypedResults.Ok(result);
     }
