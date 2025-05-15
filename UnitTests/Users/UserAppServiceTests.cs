@@ -41,7 +41,7 @@ public class UserAppServiceTests
             this._unitOfWorkMock.CommitAsync(cancellationToken).Returns(Task.FromResult(1));
 
             // Act
-            var result = await this._userAppService.CreateUserAsync(request, UserRole.User, cancellationToken);
+            var result = await this._userAppService.CreateUserAsync(request, UserRole.StandardUser, cancellationToken);
 
             // Assert
             Assert.NotEqual(Guid.Empty, result);
@@ -49,7 +49,7 @@ public class UserAppServiceTests
             await this._userRepositoryMock.Received(1).AddAsync(Arg.Is<User>(u =>
                 u.Name.ToString() == request.Name &&
                 u.Email.ToString() == request.Email &&
-                u.Role == UserRole.User), cancellationToken);
+                u.Role == UserRole.StandardUser), cancellationToken);
 
             await this._unitOfWorkMock.Received(1).CommitAsync(cancellationToken);
         }
@@ -106,7 +106,7 @@ public class UserAppServiceTests
 
             // Act & Assert
             var ex = await Assert.ThrowsAsync<DomainException>(() =>
-                this._userAppService.CreateUserAsync(request, UserRole.User, cancellationToken));
+                this._userAppService.CreateUserAsync(request, UserRole.StandardUser, cancellationToken));
 
             Assert.Equal("E-mail already in use.", ex.Message);
 

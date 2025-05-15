@@ -47,7 +47,7 @@ public static class UserEndpoints
         IUserAppService service,
         CancellationToken cancellationToken)
     {
-        Guid id = await service.CreateUserAsync(request, UserRole.User, cancellationToken);
+        Guid id = await service.CreateUserAsync(request, UserRole.StandardUser, cancellationToken);
         return TypedResults.CreatedAtRoute(nameof(GetUserById), routeValues: new { id });
     }
 
