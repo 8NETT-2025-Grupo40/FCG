@@ -9,9 +9,9 @@ namespace FCG.Infrastructure
 
         public ApplicationDbContext() { }
 
-        public ApplicationDbContext(string connectionString)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+            : base(options)
         {
-            _connectionString = connectionString;
         }
         
         public DbSet<User> User { get; set; }
