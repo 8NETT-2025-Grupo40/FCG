@@ -18,6 +18,8 @@ builder.ConfigureSerilog();
 
 var app = builder.Build();
 
+app.ApplyMigrationsIfConfigured();
+
 app.ConfigureMiddlewares();
 
 // Endpoints

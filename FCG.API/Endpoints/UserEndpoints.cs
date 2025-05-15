@@ -12,7 +12,8 @@ public static class UserEndpoints
             .MapGroup("/users")
             .WithTags("User");
 
-        userGroup.MapPost("/", CreateUser);
+        userGroup.MapPost("/", CreateUser)
+            .WithSummary("Register an standard user");
 
         userGroup.MapGet("/{id:guid}", GetUserById)
             .WithName("GetUserById")
@@ -29,7 +30,8 @@ public static class UserEndpoints
             .WithSummary("Lists all registered users.");
 
         adminGroup.MapPost("/", CreateAdminUser)
-            .WithName("CreateAdminUser");
+            .WithName("CreateAdminUser")
+            .WithSummary("Register an administrator user");
     }
 
     private static async Task<Ok<IEnumerable<UserResponse>>> GetAllUsers(
