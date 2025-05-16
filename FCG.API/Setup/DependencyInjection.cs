@@ -16,9 +16,10 @@ public static class DependencyInjection
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IUserAppService, UserAppService>();
 
-        //Login
+        // Autenticação
         services.AddScoped<ILoginAppServices, LoginAppServices>();
 
+        // Common
         services.AddScoped<IUnitOfWork, UnitOfWork>();
     }
 

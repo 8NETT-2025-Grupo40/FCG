@@ -4,13 +4,13 @@ namespace FCG.Domain.Modules.Users;
 
 public record Name
 {
-    public string Value { get; }
+    public string Value { get; } = null!;
 
     public Name(string value)
     {
         if (string.IsNullOrWhiteSpace(value))
         {
-            throw new DomainException("Nome é obrigatório.");
+            throw new DomainException("Name is required.");
         }
 
         Value = value.Trim();

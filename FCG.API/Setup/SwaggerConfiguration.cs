@@ -8,14 +8,13 @@ public static class SwaggerConfiguration
     {
         services.AddEndpointsApiExplorer();
 
-        //TODO: criar midleware para configuração de swagger
         services.AddSwaggerGen(c =>
         {
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "FCG API", Version = "v1" });
 
             c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
-                Description = "Insira o token JWT no campo abaixo. Exemplo: Bearer {seu token}",
+                Description = "Enter the JWT token in the field below. Example: Bearer {your token}",
                 Name = "Authorization",
                 In = ParameterLocation.Header,
                 Type = SecuritySchemeType.Http,
@@ -47,7 +46,7 @@ public static class SwaggerConfiguration
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Documentação de API para projeto FCG");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "API Documentation for FCG Project");
                 c.RoutePrefix = string.Empty;
             });
         }

@@ -3,8 +3,8 @@ namespace FCG.Application.Modules.Login
     public class LoginAppResultDTO
     {
         public bool IsSuccess { get; set; }
-        public string Token { get; set; }
-        public string Message { get; set; }
+        public string Token { get; set; } = string.Empty;
+        public string Message { get; set; } = string.Empty;
 
         public static LoginAppResultDTO Success(string token, string message){
             return new(){
@@ -15,8 +15,8 @@ namespace FCG.Application.Modules.Login
         }
 
         public static LoginAppResultDTO Fail(string message){
-            return new(){ 
-                IsSuccess = false, 
+            return new(){
+                IsSuccess = false,
                 Message = message};
         }
     }
