@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using NSubstitute;
+using NSubstitute.ReturnsExtensions;
 
 namespace UnitTests.Extensions;
 
@@ -10,11 +11,25 @@ public static class LoggerExtensions
         logger.Received(numberOfCalls).Log(
             logLevel,
             Arg.Any<EventId>(),
-            Arg.Is<object>(o => o.ToString().Contains(expectedMessage)),
+            Arg.Is<object>(o => o.ToString().Contains(expectedMessage, StringComparison.OrdinalIgnoreCase)),
             Arg.Any<Exception>(),
             Arg.Any<Func<object, Exception, string>>()
         );
     }
+    
+    public static void Verify(this ILogger logger, LogLevel logLevel, int numberOfCalls, string[] expectedValues)
+    {
+        logger.Received(numberOfCalls).Log(
+            logLevel,
+            Arg.Any<EventId>(),
+            Arg.Is<object>(o => VerifyMatches(o.ToString(), expectedValues)),
+            Arg.Any<Exception>(),
+            Arg.Any<Func<object, Exception, string>>()
+        );
+    }
+
+    private static bool VerifyMatches(string value, string[] expectedValues) => 
+        expectedValues.All(expectedValue => value.Contains(expectedValue, StringComparison.OrdinalIgnoreCase));
 
     public static void VerifyItWasNeverCalled(this ILogger logger)
     {
