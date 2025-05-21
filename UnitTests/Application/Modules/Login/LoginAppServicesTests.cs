@@ -18,7 +18,7 @@ namespace UnitTests.Application.Modules.Login
             _userRepository = Substitute.For<IUserRepository>();
             _jwtTokenGenerator = Substitute.For<IJwtTokenGenerator>();
 
-            _loginAppServices = new(_userRepository, _jwtTokenGenerator);
+            _loginAppServices = new LoginAppServices(_userRepository, _jwtTokenGenerator);
         }
 
         [Fact]
