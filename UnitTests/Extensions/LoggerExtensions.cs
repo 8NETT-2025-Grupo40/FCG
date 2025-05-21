@@ -11,7 +11,7 @@ public static class LoggerExtensions
         logger.Received(numberOfCalls).Log(
             logLevel,
             Arg.Any<EventId>(),
-            Arg.Is<object>(o => o.ToString().Contains(expectedMessage, StringComparison.OrdinalIgnoreCase)),
+            Arg.Is<object>(o => o.ToString().Contains(expectedMessage, StringComparison.Ordinal)),
             Arg.Any<Exception>(),
             Arg.Any<Func<object, Exception, string>>()
         );
@@ -29,7 +29,7 @@ public static class LoggerExtensions
     }
 
     private static bool VerifyMatches(string value, string[] expectedValues) => 
-        expectedValues.All(expectedValue => value.Contains(expectedValue, StringComparison.OrdinalIgnoreCase));
+        expectedValues.All(expectedValue => value.Contains(expectedValue, StringComparison.Ordinal));
 
     public static void VerifyItWasNeverCalled(this ILogger logger)
     {
