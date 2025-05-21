@@ -4,6 +4,7 @@ using Serilog;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
+    .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
     .CreateBootstrapLogger();
 
 var builder = WebApplication.CreateBuilder(args);
