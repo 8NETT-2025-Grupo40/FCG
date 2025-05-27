@@ -2,17 +2,23 @@
 
 ## Visão Geral  
 
-O FCG (FIAP Cloud Games) é uma plataforma RESTful desenvolvido em .NET 8 para venda e gestão de jogos digitais, além da gestão de servidores de jogos. A API oferece entre outras funcionalidades:
+O FCG (FIAP Cloud Games) é uma plataforma RESTful desenvolvida em .NET 8 para venda e gestão de jogos digitais, além da gestão de servidores de jogos. 
+
+Entre as funcionalidades funcionalidades da API estão:
 
 - **Cadastro e autenticação de usuários** via JWT, com controle de papéis (usuário e administrador);
-- **Arquitetura modular e foco em DDD** para facilitar evolução  
-- **(em desenvolvimento) Gerenciamento de biblioteca**: registro e consulta dos jogos adquiridos  
-- **(em desenvolvimento) Administração**: CRUD de jogos e promoções para administradores  
-- **(em desenvolvimento) Gestão de servidores de partidas** como base para futuros módulos  
+- **Arquitetura modular e foco em DDD** para facilitar evolução;
+- **(em desenvolvimento) Gerenciamento de biblioteca**: registro e consulta dos jogos adquiridos;
+- **(em desenvolvimento) Administração**: CRUD de jogos e promoções para administradores;
+- **(em desenvolvimento) Gestão de servidores de partidas** como base para futuros módulos. 
 
-O projeto é acadêmico, da instituição de ensino FIAP, turma 8NETT no curso de Pós Tech de Arquitetura de Sistema .NET, grupo 40.
+Projeto acadêmico solicitado pela instituição de ensino FIAP.
 
-### Contribuidores:
+**Curso:** Arquitetura de Sistemas .NET
+**Turma:** 8NETT  
+**Grupo:** 40
+
+### Integrantes:
 - [Luciano Castilho](https://github.com/lcastilho)
 - [Anderson Mori](https://github.com/AndersonMori)
 - [Ricardo Cavati](https://github.com/RicardoKromerCavati)
