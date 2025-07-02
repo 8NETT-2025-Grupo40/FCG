@@ -23,9 +23,9 @@ jobs:
         with:
           name: build-output
           path: |
-            **/bin/Debug/net8.0/*.dll
-            **/bin/Debug/net8.0/*.pdb
-            **/bin/Debug/net8.0/*.exe
+            **/bin/Release/net8.0/*.dll
+            **/bin/Release/net8.0/*.pdb
+            **/bin/Release/net8.0/*.exe
   tests:
     name: Run unit tests
     needs: build
