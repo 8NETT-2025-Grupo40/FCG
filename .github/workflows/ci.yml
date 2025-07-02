@@ -18,6 +18,14 @@ jobs:
       - run: |
           dotnet restore
           dotnet build --no-restore --configuration Release
+      - name: Publish build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-output
+          path: |
+            **/bin/Debug/net8.0/*.dll
+            **/bin/Debug/net8.0/*.pdb
+            **/bin/Debug/net8.0/*.exe
   tests:
     name: Run unit tests
     needs: build
@@ -26,6 +34,13 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
+      
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-output
+          path: ./build-output
+        
       - name: Tests
         uses: actions/setup-dotnet@v3
         with:
