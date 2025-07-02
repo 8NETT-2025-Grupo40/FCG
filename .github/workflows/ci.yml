@@ -2,7 +2,7 @@ name: Fiap Cloud Games CI
 
 on:
   push:
-    branches: [ * ]
+    branches: [ '*' ]
 jobs:
   build:
     name: Build the solution
