@@ -14,17 +14,16 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 8.0.x
-      - run: dotnet build
+      - run: dotnet build --no-restore --configuration Release
   tests:
-    name: Run unit tests on solution
-    runs-on: ubuntu-latest
+    name: Run unit tests
     needs: build
+    runs-on: ubuntu-latest
     
     steps:
-      - uses: actions/checkout@v4
       - name: Tests
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 8.0.x
-      - run: dotnet test --no-build
+      - run: dotnet test --no-build --no-restore -v d
         
