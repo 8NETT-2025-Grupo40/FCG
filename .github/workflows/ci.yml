@@ -23,9 +23,7 @@ jobs:
         with:
           name: build-output
           path: |
-            **/bin/Release/net8.0/*.dll
-            **/bin/Release/net8.0/*.pdb
-            **/bin/Release/net8.0/*.exe
+            **/*.*
   tests:
     name: Run unit tests
     needs: build
@@ -39,12 +37,12 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-output
-          path: ./build-output
+          path: ./result
         
       - name: Tests
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 8.0.x
-      - run: dotnet test ./build-output/UnitTests/bin/Release/net8.0/UnitTests.dll --no-build --no-restore
+      - run: dotnet test ./result/UnitTests.csproj --no-build --no-restore
       
         
