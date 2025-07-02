@@ -14,7 +14,9 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 8.0.x
-      - run: dotnet build --no-restore --configuration Release
+      - run: |
+          dotnet restore
+          dotnet build --no-restore --configuration Release
   tests:
     name: Run unit tests
     needs: build
