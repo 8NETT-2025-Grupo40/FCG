@@ -18,10 +18,10 @@ jobs:
   tests:
     name: Run unit tests on solution
     runs-on: ubuntu-latest
+    needs: build
     
     steps:
       - uses: actions/checkout@v4
-      - needs: build
       - name: Tests
         uses: actions/setup-dotnet@v3
         with:
