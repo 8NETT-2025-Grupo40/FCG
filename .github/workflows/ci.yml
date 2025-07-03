@@ -37,20 +37,20 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-output
-          path: ./result
+          path: ./build_result
         
       - name: Tests
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 8.0.x
       - run: |
-          dotnet test ./result/FCG.sln --logger TestResults --results-directory "Results"
+          dotnet test ./build_result/FCG.sln --logger trx --results-directory "Results"
 
       - name: Upload test restult
         uses: actions/upload-artifact@v4
         with:
           name: TestResults
-          path: "Results"
+          path: "./build_result/Results"
         if: ${{ always() }}
           
       
