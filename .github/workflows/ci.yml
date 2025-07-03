@@ -44,7 +44,14 @@ jobs:
         with:
           dotnet-version: 8.0.x
       - run: |
-          dotnet test ./result/FCG.sln
+          dotnet test ./result/FCG.sln --no-build --logger TestResults --results-directory "Results"
+
+      - name: Upload test restult
+        uses: actions/upload-artifact@v4
+        with:
+          name: TestResults
+          path: "Results"
+        if: ${{ always() }}
           
       
         
