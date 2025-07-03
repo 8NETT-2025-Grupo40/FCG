@@ -18,10 +18,10 @@ jobs:
       - run: |
           dotnet restore
           dotnet build --no-restore --configuration Release
-      - name: Publish build artifacts
+      - name: Upload build output
         uses: actions/upload-artifact@v4
         with:
-          name: build-output
+          name: Build Output
           path: |
             **/*.*
   tests:
@@ -36,10 +36,10 @@ jobs:
       - name: Download build artifacts
         uses: actions/download-artifact@v4
         with:
-          name: build-output
+          name: Build Output
           path: ./build_result
         
-      - name: Tests
+      - name: Unit Tests
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 8.0.x
