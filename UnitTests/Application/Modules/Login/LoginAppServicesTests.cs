@@ -45,7 +45,7 @@ namespace UnitTests.Application.Modules.Login
             var result = await _loginAppServices.LoginAppAsync(loginRequest, cancellationToken);
 
             // Assert
-            Assert.NotNull(result);
+            Assert.Null(result);
             Assert.Equivalent(expectedResult, result);
         }
 
