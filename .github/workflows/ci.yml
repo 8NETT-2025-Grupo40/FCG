@@ -43,15 +43,23 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 8.0.x
-      - run: |
-          dotnet test ./build_result/FCG.sln --logger trx --results-directory "Results"
+      - run: dotnet test ./build_result/FCG.sln --logger trx --results-directory "Results"
 
       - name: Upload test restult
         uses: actions/upload-artifact@v4
         with:
-          name: TestResults
+          name: Test Results
           path: "Results"
         if: ${{ always() }}
+
+      - name: Test Report
+        uses: dorny/test-reporter@v2
+        if: always()
+        with:
+          name: .NET Tests Report
+          path: "**/*.trx"
+          reporter: dotnet-trx
+          fail-on-error: true
           
       
         
