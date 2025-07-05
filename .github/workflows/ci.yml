@@ -1,8 +1,8 @@
 name: Fiap Cloud Games CI
 
 on:
-  push:
-    branches: [ '*' ]
+  pull_request:
+    types: [opened,synchronize]
 jobs:
   build:
     name: Build the solution
