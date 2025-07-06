@@ -24,6 +24,7 @@ app.ApplyMigrationsIfConfigured();
 app.ConfigureMiddlewares();
 
 // Endpoints
+app.MapHealthCheckEndpoints();
 app.MapUserEndpoints();
 app.MapAuthenticationEndpoints();
 app.MapGameEndpoints();
