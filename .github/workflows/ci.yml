@@ -26,7 +26,6 @@ jobs:
       - run: |
           dotnet restore
           dotnet build --no-restore --configuration Release
-          ls -R
       - name: Upload build output
         uses: actions/upload-artifact@v4
         with:
@@ -75,9 +74,6 @@ jobs:
       runs-on: ubuntu-latest
 
       steps:
-        - name: Check out repository code
-          uses: actions/checkout@v4
-
         - name: Configure AWS credentials
           uses: aws-actions/configure-aws-credentials@0e613a0980cbf65ed5b322eb7a1e075d28913a83
           with: 
