@@ -1,5 +1,4 @@
 {
-    "taskDefinitionArn": "arn:aws:ecs:us-east-1:478511033947:task-definition/TSK-FCG:3",
     "containerDefinitions": [
         {
             "name": "fcg-api",
@@ -43,40 +42,8 @@
     "family": "TSK-FCG",
     "executionRoleArn": "arn:aws:iam::478511033947:role/ecsTaskExecutionRole",
     "networkMode": "awsvpc",
-    "revision": 3,
     "volumes": [],
-    "status": "ACTIVE",
-    "requiresAttributes": [
-        {
-            "name": "com.amazonaws.ecs.capability.logging-driver.awslogs"
-        },
-        {
-            "name": "ecs.capability.execution-role-awslogs"
-        },
-        {
-            "name": "com.amazonaws.ecs.capability.ecr-auth"
-        },
-        {
-            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
-        },
-        {
-            "name": "ecs.capability.execution-role-ecr-pull"
-        },
-        {
-            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
-        },
-        {
-            "name": "ecs.capability.task-eni"
-        },
-        {
-            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.29"
-        }
-    ],
     "placementConstraints": [],
-    "compatibilities": [
-        "EC2",
-        "FARGATE"
-    ],
     "runtimePlatform": {
         "cpuArchitecture": "X86_64",
         "operatingSystemFamily": "LINUX"
@@ -86,6 +53,10 @@
     ],
     "cpu": "1024",
     "memory": "2048",
-    "registeredAt": "2025-07-14T21:47:19.983000-03:00",
-    "registeredBy": "arn:aws:iam::478511033947:user/RicardoCavati"
+    "tags": [
+        {
+            "key": "entrega",
+            "value": "2"
+        }
+    ]
 }
