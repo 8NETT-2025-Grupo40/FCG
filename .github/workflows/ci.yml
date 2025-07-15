@@ -4,7 +4,12 @@ on:
   push:
     branches: [ 'main' ]
   pull_request:
-    types: [opened,synchronize]
+    types: [opened, synchronize]
+
+env:
+  AWS_REGION: us-east-1
+  ECR_REPOSITORY: image-repository
+
 jobs:
   build:
     name: Build the solution
@@ -13,6 +18,7 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
+
       - name: Build
         uses: actions/setup-dotnet@v3
         with:
@@ -25,7 +31,7 @@ jobs:
         with:
           name: Build Output
           path: |
-            **/*.*
+            ./
   tests:
     name: Run unit tests
     needs: build
@@ -34,7 +40,7 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
-      
+        
       - name: Download build artifacts
         uses: actions/download-artifact@v4
         with:
@@ -62,6 +68,39 @@ jobs:
           path: "**/*.trx"
           reporter: dotnet-trx
           fail-on-error: true
-          
+  publish_image_to_ecr:
+      name: Publish image to ECR repository
+      needs: [build, tests]
+      runs-on: ubuntu-latest
+
+      steps:
+        - name: Configure AWS credentials
+          uses: aws-actions/configure-aws-credentials@0e613a0980cbf65ed5b322eb7a1e075d28913a83
+          with: 
+            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            aws-region: ${{ env.AWS_REGION }}
+
+        - name: Login to Amazon ECR
+          id: login-ecr
+          uses: aws-actions/amazon-ecr-login@62f4f872db3836360b72999f4b87f1ff13310f3a
+
+        - name: Download build artifacts
+          uses: actions/download-artifact@v4
+          with:
+            name: Build Output
+            path: ./build_result
+
+        - name: Build, tag and push image to Amazon ECR
+          id: build-image
+          env:
+            ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+            IMAGE_TAG: ${{ github.sha }}
+          run: |
+            docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./build_result/
+            docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+            echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+            
+
       
         
