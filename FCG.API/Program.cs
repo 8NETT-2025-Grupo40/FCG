@@ -1,5 +1,6 @@
 using FCG.API.Endpoints;
 using FCG.API.Setup;
+using FCG.Infrastructure;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -14,6 +15,9 @@ builder.Services.RegisterMiddlewares();
 builder.Services.AddSwaggerConfiguration();
 builder.Services.AddJwtAuthentication(builder.Configuration);
 builder.Services.AddDbContextConfiguration(builder.Configuration);
+builder.Services
+    .AddHealthChecks()
+    .AddCheck<DbContextHealthCheck<ApplicationDbContext>>("DbContext_Check");
 
 builder.ConfigureSerilog();
 

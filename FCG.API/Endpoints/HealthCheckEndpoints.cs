@@ -1,4 +1,6 @@
 ﻿using FCG.Infrastructure;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace FCG.API.Endpoints
 {
@@ -6,31 +8,34 @@ namespace FCG.API.Endpoints
     {
         public static void MapHealthCheckEndpoints(this IEndpointRouteBuilder app)
         {
-            // Agrupa todos os endpoints de health sob o prefixo "/health"
-            RouteGroupBuilder group = app
-                .MapGroup("/health")
-                .WithTags("Health");
-
-            group.MapGet("/", Health)
-                .WithName("HealthCheck")
-                .Produces(StatusCodes.Status200OK)
-                .Produces(StatusCodes.Status503ServiceUnavailable);
-        }
-
-        // Handler interno: verifica a conexão com o banco
-        private static async Task<IResult> Health(
-            ApplicationDbContext db,
-            CancellationToken cancellationToken)
-        {
-            bool canConnect = await db.Database
-                .CanConnectAsync(cancellationToken);
-
-            if (!canConnect)
-            {
-                return Results.StatusCode(StatusCodes.Status503ServiceUnavailable);
-            }
-
-            return Results.Ok(new { status = "Healthy" });
+            app.MapHealthChecks(
+                    "/health",
+                    new HealthCheckOptions
+                    {
+                        ResultStatusCodes =
+                        {
+                            [HealthStatus.Healthy] = StatusCodes.Status200OK,
+                            [HealthStatus.Unhealthy] = StatusCodes.Status503ServiceUnavailable,
+                            [HealthStatus.Degraded] = StatusCodes.Status503ServiceUnavailable
+                        },
+                        ResponseWriter = async (ctx, report) =>
+                        {
+                            ctx.Response.ContentType = "application/json";
+                            var payload = new
+                            {
+                                status = report.Status.ToString(),
+                                checks = report.Entries.Select(e => new
+                                {
+                                    name = e.Key,
+                                    status = e.Value.Status.ToString(),
+                                    description = e.Value.Description,
+                                    error = e.Value.Exception?.Message
+                                })
+                            };
+                            await ctx.Response.WriteAsJsonAsync(payload);
+                        }
+                    })
+                .WithName("HealthCheck");
         }
     }
 }
