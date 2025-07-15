@@ -87,6 +87,5 @@
     "cpu": "1024",
     "memory": "2048",
     "registeredAt": "2025-07-14T21:47:19.983000-03:00",
-    "registeredBy": "arn:aws:iam::478511033947:user/RicardoCavati",
-    "enableFaultInjection": false
+    "registeredBy": "arn:aws:iam::478511033947:user/RicardoCavati"
 }
