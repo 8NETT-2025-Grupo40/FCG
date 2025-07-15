@@ -12,7 +12,7 @@ env:
   ECR_REPOSITORY: image-repository
   ECS_SERVICE: TSK-FCG-service
   ECS_CLUSTER: FCG-Cluster
-  ECS_TASK_DEFINITION: https://us-east-1.console.aws.amazon.com/ecs/v2/task-definitions/TSK-FCG?status=ACTIVE&region=us-east-1
+  ECS_TASK_DEFINITION: .github/ecs/ecs-task-def.json
   CONTAINER_NAME: fcg-api
 
 jobs:
