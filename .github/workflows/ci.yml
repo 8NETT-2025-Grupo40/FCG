@@ -73,12 +73,15 @@ jobs:
           path: "**/*.trx"
           reporter: dotnet-trx
           fail-on-error: true
-  publish_image_to_ecr:
+  deploy:
       name: Deploy
       needs: [build, tests]
       runs-on: ubuntu-latest
 
       steps:
+        - name: Check out repository code
+          uses: actions/checkout@v4
+
         - name: Configure AWS credentials
           uses: aws-actions/configure-aws-credentials@0e613a0980cbf65ed5b322eb7a1e075d28913a83
           with: 
