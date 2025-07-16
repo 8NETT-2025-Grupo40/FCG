@@ -120,10 +120,6 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
-      - name: Set image uri output
-        id: set-image-uri
-        run: echo "image-uri=${IMAGE_URI}" >> $GITHUB_OUTPUT
-
   deploy:
       name: Deploy on ECS
       needs: [build, tests, migration, publish]
@@ -147,7 +143,7 @@ jobs:
             task-definition: ${{ env.ECS_TASK_DEFINITION }}
             container-name: ${{ env.CONTAINER_NAME }}
             #image: ${{ steps.build-image.outputs.image }}
-            image: ${{ needs.publish.outputs.image-uri }}
+            image: ${{ needs.steps.build-image.outputs.image }}
 
         - name: Deploy ECS Task Definition
           uses: aws-actions/amazon-ecs-deploy-task-definition@df9643053eda01f169e64a0e60233aacca83799a
