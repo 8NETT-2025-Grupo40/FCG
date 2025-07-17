@@ -14,27 +14,27 @@ public class DbContextHealthCheck<TContext>
         this._dbContext = dbContext;
     }
 
-    public Task<HealthCheckResult> CheckHealthAsync(
+    public async Task<HealthCheckResult> CheckHealthAsync(
         HealthCheckContext context,
         CancellationToken cancellationToken)
     {
         try
         {
-            // Tenta fazer uma query simples, apenas para checar a conexão
-            //await this._dbContext.Database.ExecuteSqlAsync($"SELECT 1", cancellationToken);
-            return Task.FromResult(HealthCheckResult.Healthy());
+            //Tenta fazer uma query simples, apenas para checar a conexão
+            await this._dbContext.Database.ExecuteSqlAsync($"SELECT 1", cancellationToken);
+            return HealthCheckResult.Healthy();
         }
         catch (DbException dbEx)
         {
-            return Task.FromResult(HealthCheckResult.Unhealthy(
+            return HealthCheckResult.Unhealthy(
                 description: $"Failed to connect in database: {dbEx.Message}",
-                exception: dbEx));
+                exception: dbEx);
         }
         catch (Exception ex)
         {
-            return Task.FromResult(HealthCheckResult.Unhealthy(
+            return HealthCheckResult.Unhealthy(
                 description: $"Unexpected error: {ex.Message}",
-                exception: ex));
+                exception: ex);
         }
     }
 }
