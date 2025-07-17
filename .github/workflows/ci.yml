@@ -90,6 +90,8 @@ jobs:
     name: Publish docker image on ECR
     needs: [build, tests, migration]
     runs-on: ubuntu-latest
+    outputs:
+      image: ${{ steps.build-image.outputs.image }}
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
@@ -127,21 +129,24 @@ jobs:
       #     name: Image output
       #     path: $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
-  # deploy:
-  #   name: Deploy on ECS
-  #   needs: [build, tests, migration, publish]
-  #   runs-on: ubuntu-latest
+  deploy:
+    name: Deploy on ECS
+    needs: [build, tests, migration, publish]
+    runs-on: ubuntu-latest
 
-  #   steps:
-      - name: Check out repository code
-        uses: actions/checkout@v4
+    steps:
+      - name: Use publish output
+        run: echo "Value ${{ steps.build-image.outputs.image }}"
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@0e613a0980cbf65ed5b322eb7a1e075d28913a83
-        with: 
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
+      # - name: Check out repository code
+      #   uses: actions/checkout@v4
+
+      # - name: Configure AWS credentials
+      #   uses: aws-actions/configure-aws-credentials@0e613a0980cbf65ed5b322eb7a1e075d28913a83
+      #   with: 
+      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     aws-region: ${{ env.AWS_REGION }}
 
       # - name: Download image
       #   uses: actions/download-artifact@v4
@@ -149,18 +154,19 @@ jobs:
       #     name: Image output
       #     path: ./image_result
 
-      - name: Fill the image ID in the ECS task definition
-        id: task-def
-        uses: aws-actions/amazon-ecs-render-task-definition@c804dfbdd57f713b6c079302a4c01db7017a36fc
-        with:
-          task-definition: ${{ env.ECS_TASK_DEFINITION }}
-          container-name: ${{ env.CONTAINER_NAME }}
-          image: ${{ steps.build-image.outputs.image }}
+      # - name: Fill the image ID in the ECS task definition
+      #   id: task-def
+      #   uses: aws-actions/amazon-ecs-render-task-definition@c804dfbdd57f713b6c079302a4c01db7017a36fc
+      #   with:
+      #     task-definition: ${{ env.ECS_TASK_DEFINITION }}
+      #     container-name: ${{ env.CONTAINER_NAME }}
+      #     #image: ${{ steps.build-image.outputs.image }}
+      #     image: ./image_result/
 
-      - name: Deploy ECS Task Definition
-        uses: aws-actions/amazon-ecs-deploy-task-definition@df9643053eda01f169e64a0e60233aacca83799a
-        with:
-          task-definition: ${{ steps.task-def.outputs.task-definition }}
-          service: ${{ env.ECS_SERVICE }}
-          cluster: ${{ env.ECS_CLUSTER }}
-          wait-for-service-stability: true
+      # - name: Deploy ECS Task Definition
+      #   uses: aws-actions/amazon-ecs-deploy-task-definition@df9643053eda01f169e64a0e60233aacca83799a
+      #   with:
+      #     task-definition: ${{ steps.task-def.outputs.task-definition }}
+      #     service: ${{ env.ECS_SERVICE }}
+      #     cluster: ${{ env.ECS_CLUSTER }}
+      #     wait-for-service-stability: true
