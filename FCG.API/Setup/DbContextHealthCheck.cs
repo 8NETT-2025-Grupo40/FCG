@@ -20,7 +20,7 @@ public class DbContextHealthCheck<TContext>
     {
         try
         {
-            // Tenta fazer uma query simples, apenas para checar a conexão
+            //Tenta fazer uma query simples, apenas para checar a conexão
             await this._dbContext.Database.ExecuteSqlAsync($"SELECT 1", cancellationToken);
             return HealthCheckResult.Healthy();
         }

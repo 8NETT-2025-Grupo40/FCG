@@ -1,5 +1,4 @@
-﻿using FCG.Infrastructure;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+﻿using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace FCG.API.Endpoints
