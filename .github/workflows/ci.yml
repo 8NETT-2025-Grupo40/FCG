@@ -145,6 +145,9 @@ jobs:
       - name: Use publish output
         run: echo "$IMAGE"
 
+      - name: Use publish output
+        run: echo ${{ needs.publish.outputs.image }}
+
       - name: Dump all environment variables
         run: printenv
 
