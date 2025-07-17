@@ -91,7 +91,7 @@ jobs:
     needs: [build, tests, migration]
     runs-on: ubuntu-latest
     outputs:
-      image: ${{ steps.build-image.outputs.image }}
+      image: ${{ steps.build-image.outputs.IMAGE }}
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
@@ -121,7 +121,8 @@ jobs:
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./build_result/
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+          echo "$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+          echo "IMAGE=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
       
       # - name: Upload image
       #   uses: actions/upload-artifact@v4
@@ -133,10 +134,11 @@ jobs:
     name: Deploy on ECS
     needs: [build, tests, migration, publish]
     runs-on: ubuntu-latest
-
+    env:
+      IMAGE: ${{ needs.publish.outputs.image }}
     steps:
       - name: Use publish output
-        run: echo "Value ${{ needs.publish.outputs.image }}"
+        run: echo "Value $IMAGE"
 
       # - name: Check out repository code
       #   uses: actions/checkout@v4
