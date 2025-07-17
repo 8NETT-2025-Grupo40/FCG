@@ -2,8 +2,7 @@ name: Fiap Cloud Games CI
 
 on:
   push:
-    #trigger pipeline on all branches for test purposes, it should only be the 'main' branch
-    branches: [ '*' ]
+    branches: [ 'main' ]
   pull_request:
     types: [opened, synchronize]
 
