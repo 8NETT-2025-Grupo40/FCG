@@ -136,7 +136,7 @@ jobs:
 
     steps:
       - name: Use publish output
-        run: echo "Value ${{ steps.build-image.outputs.image }}"
+        run: echo "Value ${{ needs.publish.outputs.image }}"
 
       # - name: Check out repository code
       #   uses: actions/checkout@v4
