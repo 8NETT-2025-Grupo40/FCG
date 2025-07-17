@@ -87,7 +87,7 @@ jobs:
          run: echo "Fake migrations applied successfully!"
 
   deploy:
-    name: Publish docker image on ECR
+    name: Publish docker image on ECR and deploy to ECS
     needs: [build, tests, migration]
     runs-on: ubuntu-latest
     outputs:
@@ -121,6 +121,7 @@ jobs:
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./build_result/
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
       - name: Fill the image ID in the ECS task definition
         id: task-def
