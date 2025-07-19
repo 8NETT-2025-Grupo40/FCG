@@ -2,8 +2,7 @@ name: Fiap Cloud Games CI
 
 on:
   push:
-    #Pushes on any branch only for test purposes.
-    branches: [ '*' ]
+    branches: [ 'main' ]
   pull_request:
     types: [opened, synchronize]
 
