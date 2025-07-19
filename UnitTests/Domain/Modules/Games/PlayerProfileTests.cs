@@ -1,4 +1,6 @@
-﻿using FCG.Domain.Modules.Games;
+﻿using FCG.Domain.Games.Entities;
+using FCG.Domain.Games.Enums;
+using FCG.Domain.Games.ValueObjects;
 
 namespace UnitTests.Domain.Modules.Games;
 

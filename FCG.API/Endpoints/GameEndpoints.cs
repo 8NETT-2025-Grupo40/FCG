@@ -1,5 +1,5 @@
 ﻿using FCG.API.Setup;
-using FCG.Application.Modules.Games;
+using FCG.Application.Games;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;

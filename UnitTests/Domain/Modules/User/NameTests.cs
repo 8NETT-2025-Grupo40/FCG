@@ -1,5 +1,5 @@
 ﻿using FCG.Domain.Common;
-using FCG.Domain.Modules.Users;
+using FCG.Domain.Users.ValueObjects;
 
 namespace UnitTests.Domain.Modules.User;
 

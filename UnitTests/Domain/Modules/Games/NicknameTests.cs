@@ -1,5 +1,5 @@
 ﻿using FCG.Domain.Common;
-using FCG.Domain.Modules.Games;
+using FCG.Domain.Games.ValueObjects;
 
 namespace UnitTests.Domain.Modules.Games;
 

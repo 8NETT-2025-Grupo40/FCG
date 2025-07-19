@@ -1,10 +1,10 @@
 ﻿using FCG.API.Middlewares;
-using FCG.Application.Modules.Login;
-using FCG.Application.Modules.Users;
+using FCG.Application.Login;
+using FCG.Application.Users;
 using FCG.Domain.Common;
-using FCG.Domain.Modules.Users;
+using FCG.Domain.Users.Repositories;
 using FCG.Infrastructure;
-using FCG.Infrastructure.Modules.Users;
+using FCG.Infrastructure.Repositories;
 
 namespace FCG.API.Setup;
 

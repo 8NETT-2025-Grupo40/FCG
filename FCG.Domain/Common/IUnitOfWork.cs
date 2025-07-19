@@ -1,4 +1,4 @@
-﻿using FCG.Domain.Modules.Users;
+﻿using FCG.Domain.Users.Repositories;
 
 namespace FCG.Domain.Common;
 

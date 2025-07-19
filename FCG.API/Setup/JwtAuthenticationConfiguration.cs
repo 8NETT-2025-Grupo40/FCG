@@ -1,6 +1,6 @@
-﻿using FCG.Application.Modules.TokenGenerators;
-using FCG.Domain.Modules.Users;
-using FCG.Infrastructure.Modules.Tokens;
+﻿using FCG.Application.TokenGenerators;
+using FCG.Domain.Users.Enums;
+using FCG.Infrastructure.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;

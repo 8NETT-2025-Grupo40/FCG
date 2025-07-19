@@ -1,4 +1,4 @@
-﻿using FCG.Application.Modules.Login;
+﻿using FCG.Application.Login;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
