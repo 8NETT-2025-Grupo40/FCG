@@ -42,6 +42,7 @@
   ],
   "family": "TSK-FCG",
   "executionRoleArn": "arn:aws:iam::478511033947:role/ecsTaskExecutionRole",
+  "taskRoleArn": "arn:aws:iam::478511033947:role/ECSTasksRole",
   "networkMode": "awsvpc",
   "volumes": [],
   "placementConstraints": [],
