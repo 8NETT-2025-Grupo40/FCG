@@ -15,12 +15,13 @@
                 }
             ],
             "essential": true,
-            "environment": [
+      "secrets": [
                 {
                     "name": "ConnectionStrings__DefaultConnection",
-                    "value": "xxxxxx"
+          "valueFrom": "arn:aws:secretsmanager:us-east-1:478511033947:secret:fcg-api-connection-string-ADiQYJ"
                 }
             ],
+      "environment": [],
             "environmentFiles": [],
             "mountPoints": [],
             "volumesFrom": [],
