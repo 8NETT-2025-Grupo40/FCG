@@ -1,6 +1,6 @@
 ﻿using FCG.API.Setup;
-using FCG.Application.Modules.Users;
-using FCG.Domain.Modules.Users;
+using FCG.Application.Users;
+using FCG.Domain.Users.Enums;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 

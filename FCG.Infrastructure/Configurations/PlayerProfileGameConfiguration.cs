@@ -1,4 +1,4 @@
-﻿using FCG.Domain.Modules.Games;
+﻿using FCG.Domain.Games.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

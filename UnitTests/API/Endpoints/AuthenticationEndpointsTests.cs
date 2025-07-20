@@ -1,5 +1,5 @@
 ﻿using FCG.API.Endpoints;
-using FCG.Application.Modules.Login;
+using FCG.Application.Login;
 using Microsoft.AspNetCore.Http.HttpResults;
 using NSubstitute;
 

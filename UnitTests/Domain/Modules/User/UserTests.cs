@@ -1,5 +1,6 @@
 ﻿using FCG.Domain.Common;
-using FCG.Domain.Modules.Users;
+using FCG.Domain.Users.Enums;
+using FCG.Domain.Users.ValueObjects;
 
 namespace UnitTests.Domain.Modules.User
 {
@@ -17,7 +18,7 @@ namespace UnitTests.Domain.Modules.User
             var status = expectedStatus;
 
             // Act
-            FCG.Domain.Modules.Users.User user = new(name, email, password, role, status);
+            FCG.Domain.Users.Entities.User user = new(name, email, password, role, status);
 
             // Assert
             Assert.Equal(name, user.Name);

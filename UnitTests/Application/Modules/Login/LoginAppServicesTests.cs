@@ -1,6 +1,9 @@
-﻿using FCG.Application.Modules.Login;
-using FCG.Application.Modules.TokenGenerators;
-using FCG.Domain.Modules.Users;
+﻿using FCG.Application.Login;
+using FCG.Application.TokenGenerators;
+using FCG.Domain.Users.Entities;
+using FCG.Domain.Users.Enums;
+using FCG.Domain.Users.Repositories;
+using FCG.Domain.Users.ValueObjects;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
 

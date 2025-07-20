@@ -1,4 +1,4 @@
-﻿using FCG.Domain.Modules.Users;
+﻿using FCG.Domain.Users.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace FCG.Infrastructure

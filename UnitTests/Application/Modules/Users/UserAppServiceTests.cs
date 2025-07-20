@@ -1,6 +1,9 @@
-﻿using FCG.Application.Modules.Users;
+﻿using FCG.Application.Users;
 using FCG.Domain.Common;
-using FCG.Domain.Modules.Users;
+using FCG.Domain.Users.Entities;
+using FCG.Domain.Users.Enums;
+using FCG.Domain.Users.Repositories;
+using FCG.Domain.Users.ValueObjects;
 using NSubstitute;
 
 namespace UnitTests.Application.Modules.Users;
