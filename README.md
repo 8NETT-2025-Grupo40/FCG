@@ -16,7 +16,7 @@ Projeto acadêmico solicitado pela instituição de ensino FIAP.
 
 **Curso:** Arquitetura de Sistemas .NET
 **Turma:** 8NETT  
-**Grupo:** 40
+**Grupo:** 63
 
 ### Integrantes:
 - [Luciano Castilho](https://github.com/lcastilho)
