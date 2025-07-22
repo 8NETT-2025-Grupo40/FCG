@@ -69,3 +69,16 @@ Por se tratar de um projeto acadêmico, disponibilizamos as credenciais do usuá
 ```
 
 Basta utilizá-la no `POST` /authentication/login
+
+## Infraestrutura
+- **GitHub Actions**  
+  - Build, testes ao abrir o PR e deploy automático ao merge na `main`  
+- **Amazon ECR**  
+  - Armazena as imagens Docker
+- **Amazon ECS (Fargate) + ALB**  
+  - Executa containers e faz balanceamento de carga  
+- **Amazon RDS (SQL Server)**  
+  - Banco de dados gerenciado  
+- **Amazon CloudWatch**  
+  - Coleta logs (via Serilog)  
+  - Dashboards e alarmes de métricas 
