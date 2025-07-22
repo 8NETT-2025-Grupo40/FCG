@@ -77,6 +77,7 @@ jobs:
   migration:
     name: Deploy DB (migrations)
     needs: [build, tests]
+    environment: production
     # TODO: Quando a Pipeline estiver madura o suficiente, permitir o deploy do banco e da aplicação apenas no push para a main if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     runs-on: 
       - self-hosted
@@ -124,6 +125,7 @@ jobs:
   deploy:
     name: Publish docker image on ECR and deploy to ECS
     needs: [build, tests, migration]
+    environment: production
     runs-on: ubuntu-latest
     outputs:
       image: ${{ steps.build-image.outputs.IMAGE }}
