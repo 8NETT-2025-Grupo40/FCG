@@ -82,3 +82,13 @@ Basta utilizá-la no `POST` /authentication/login
 - **Amazon CloudWatch**  
   - Coleta logs (via Serilog)  
   - Dashboards e alarmes de métricas 
+
+  ### Monitoramento
+  Atualmente as configurações feitas na AWS são capazes de gerar métricas para os seguintes serviços:
+  
+  - Load balancer.
+  - Cluster do ECS.
+  - Tasks do ECS.
+  - Download das imagens do ECR.
+  - Banco de dados RDS.
+  - Armazenamento de logs.
