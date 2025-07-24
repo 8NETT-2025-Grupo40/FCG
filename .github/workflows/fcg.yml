@@ -75,19 +75,58 @@ jobs:
           fail-on-error: true
 
   migration:
-    name: Apply migrations
+    name: Deploy DB (migrations)
     needs: [build, tests]
-    runs-on: ubuntu-latest
+    environment: production
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+    runs-on: 
+      - self-hosted
+      - linux
+      - X64
+    env:
+      # Declaramos aqui a variável vazia para o linter/intellisense do GitHub Actions
+      # entender que ela existe. O valor real é atribuído em tempo de execução
+      # pelo passo “Get RDS connection string” via $GITHUB_ENV.
+      RDS_CONNECTION_STRING: ''
     steps:
-       - name: Check out repository code
-         uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-       - name: Apply migrations
-         run: echo "Fake migrations applied successfully!"
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-region: ${{ env.AWS_REGION }}
+          aws-access-key-id:     ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Get RDS connection string from Secrets Manager
+        id: get-rds-secret
+        run: |
+          SECRET_JSON=$(aws secretsmanager get-secret-value \
+            --secret-id fcg-api-connection-string \
+            --query SecretString \
+            --output text)
+          echo "RDS_CONNECTION_STRING=$SECRET_JSON" >> $GITHUB_ENV
+        env:
+          AWS_REGION: ${{ env.AWS_REGION }}
+          
+      - name: Add global tools to PATH
+        run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
+
+      - name: Apply migrations
+        env:
+          ConnectionStrings__DefaultConnection: ${{ env.RDS_CONNECTION_STRING }}
+        run: |
+          dotnet ef database update \
+            --configuration Release \
+            --project FCG.API/FCG.API.csproj \
+            --connection "$ConnectionStrings__DefaultConnection"
 
   deploy:
     name: Publish docker image on ECR and deploy to ECS
     needs: [build, tests, migration]
+    environment: production
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     outputs:
       image: ${{ steps.build-image.outputs.IMAGE }}

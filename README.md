@@ -16,7 +16,7 @@ Projeto acadêmico solicitado pela instituição de ensino FIAP.
 
 **Curso:** Arquitetura de Sistemas .NET
 **Turma:** 8NETT  
-**Grupo:** 40
+**Grupo:** 63
 
 ### Integrantes:
 - [Luciano Castilho](https://github.com/lcastilho)
@@ -69,3 +69,26 @@ Por se tratar de um projeto acadêmico, disponibilizamos as credenciais do usuá
 ```
 
 Basta utilizá-la no `POST` /authentication/login
+
+## Infraestrutura
+- **GitHub Actions**  
+  - Build, testes ao abrir o PR e deploy automático ao merge na `main`  
+- **Amazon ECR**  
+  - Armazena as imagens Docker
+- **Amazon ECS (Fargate) + ALB**  
+  - Executa containers e faz balanceamento de carga  
+- **Amazon RDS (SQL Server)**  
+  - Banco de dados gerenciado  
+- **Amazon CloudWatch**  
+  - Coleta logs (via Serilog)  
+  - Dashboards e alarmes de métricas 
+
+  ### Monitoramento
+  Atualmente as configurações feitas na AWS são capazes de gerar métricas para os seguintes serviços:
+  
+  - Load balancer.
+  - Cluster do ECS.
+  - Tasks do ECS.
+  - Download das imagens do ECR.
+  - Banco de dados RDS.
+  - Armazenamento de logs.
