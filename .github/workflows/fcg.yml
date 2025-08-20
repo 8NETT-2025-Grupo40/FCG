@@ -3,7 +3,7 @@ name: Fiap Cloud Games CI
 on:
   workflow_dispatch:
   push:
-    branches: [ 'main' ]
+    branches: [ 'azure_container_apps_tests' ]
   pull_request:
     types: [opened, synchronize]
 
