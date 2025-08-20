@@ -1,6 +1,7 @@
 name: Fiap Cloud Games CI
 
 on:
+  workflow_dispatch:
   push:
     branches: [ 'main' ]
   pull_request:
@@ -13,6 +14,10 @@ env:
   ECS_CLUSTER: FCG-Cluster
   ECS_TASK_DEFINITION: .github/ecs/ecs-task-def.json
   CONTAINER_NAME: fcg-api
+
+  AZURE_CONTAINER_REGISTRY: FCGAzureContainerRegistry
+  CONTAINER_APP_NAME: fcg-container-app
+  RESOURCE_GROUP: FCG-Azure
 
 jobs:
   build:
@@ -74,99 +79,142 @@ jobs:
           reporter: dotnet-trx
           fail-on-error: true
 
-  migration:
-    name: Deploy DB (migrations)
-    needs: [build, tests]
-    environment: production
-    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
-    runs-on: 
-      - self-hosted
-      - linux
-      - X64
-    env:
-      # Declaramos aqui a variável vazia para o linter/intellisense do GitHub Actions
-      # entender que ela existe. O valor real é atribuído em tempo de execução
-      # pelo passo “Get RDS connection string” via $GITHUB_ENV.
-      RDS_CONNECTION_STRING: ''
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+  # migration:
+  #   name: Deploy DB (migrations)
+  #   needs: [build, tests]
+  #   environment: production
+  #   if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+  #   runs-on: 
+  #     - self-hosted
+  #     - linux
+  #     - X64
+  #   env:
+  #     # Declaramos aqui a variável vazia para o linter/intellisense do GitHub Actions
+  #     # entender que ela existe. O valor real é atribuído em tempo de execução
+  #     # pelo passo “Get RDS connection string” via $GITHUB_ENV.
+  #     RDS_CONNECTION_STRING: ''
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-region: ${{ env.AWS_REGION }}
-          aws-access-key-id:     ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #     - name: Configure AWS credentials
+  #       uses: aws-actions/configure-aws-credentials@v2
+  #       with:
+  #         aws-region: ${{ env.AWS_REGION }}
+  #         aws-access-key-id:     ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-      - name: Get RDS connection string from Secrets Manager
-        id: get-rds-secret
-        run: |
-          SECRET_JSON=$(aws secretsmanager get-secret-value \
-            --secret-id fcg-api-connection-string \
-            --query SecretString \
-            --output text)
-          echo "RDS_CONNECTION_STRING=$SECRET_JSON" >> $GITHUB_ENV
-        env:
-          AWS_REGION: ${{ env.AWS_REGION }}
+  #     - name: Get RDS connection string from Secrets Manager
+  #       id: get-rds-secret
+  #       run: |
+  #         SECRET_JSON=$(aws secretsmanager get-secret-value \
+  #           --secret-id fcg-api-connection-string \
+  #           --query SecretString \
+  #           --output text)
+  #         echo "RDS_CONNECTION_STRING=$SECRET_JSON" >> $GITHUB_ENV
+  #       env:
+  #         AWS_REGION: ${{ env.AWS_REGION }}
           
-      - name: Add global tools to PATH
-        run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
+  #     - name: Add global tools to PATH
+  #       run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
 
-      - name: Apply migrations
-        env:
-          ConnectionStrings__DefaultConnection: ${{ env.RDS_CONNECTION_STRING }}
-        run: |
-          dotnet ef database update \
-            --configuration Release \
-            --project FCG.API/FCG.API.csproj \
-            --connection "$ConnectionStrings__DefaultConnection"
+  #     - name: Apply migrations
+  #       env:
+  #         ConnectionStrings__DefaultConnection: ${{ env.RDS_CONNECTION_STRING }}
+  #       run: |
+  #         dotnet ef database update \
+  #           --configuration Release \
+  #           --project FCG.API/FCG.API.csproj \
+  #           --connection "$ConnectionStrings__DefaultConnection"
 
-  deploy:
-    name: Publish docker image on ECR and deploy to ECS
-    needs: [build, tests, migration]
-    environment: production
-    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+  # deploy:
+  #   name: Publish docker image on ECR and deploy to ECS
+  #   needs: [build, tests, migration]
+  #   environment: production
+  #   if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+  #   runs-on: ubuntu-latest
+  #   outputs:
+  #     image: ${{ steps.build-image.outputs.IMAGE }}
+  #   steps:
+  #     - name: Check out repository code
+  #       uses: actions/checkout@v4
+
+  #     - name: Configure AWS credentials
+  #       uses: aws-actions/configure-aws-credentials@0e613a0980cbf65ed5b322eb7a1e075d28913a83
+  #       with: 
+  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #         aws-region: ${{ env.AWS_REGION }}
+
+  #     - name: Login to Amazon ECR
+  #       id: login-ecr
+  #       uses: aws-actions/amazon-ecr-login@62f4f872db3836360b72999f4b87f1ff13310f3a
+
+  #     - name: Build, tag and push image to Amazon ECR
+  #       id: build-image
+  #       env:
+  #         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+  #         IMAGE_TAG: latest
+  #       run: |
+  #         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+  #         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+  #         echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+  #     - name: Fill the image ID in the ECS task definition
+  #       id: task-def
+  #       uses: aws-actions/amazon-ecs-render-task-definition@c804dfbdd57f713b6c079302a4c01db7017a36fc
+  #       with:
+  #         task-definition: ${{ env.ECS_TASK_DEFINITION }}
+  #         container-name: ${{ env.CONTAINER_NAME }}
+  #         image: ${{ steps.build-image.outputs.image }}
+
+  #     - name: Deploy ECS Task Definition
+  #       uses: aws-actions/amazon-ecs-deploy-task-definition@df9643053eda01f169e64a0e60233aacca83799a
+  #       with:
+  #         task-definition: ${{ steps.task-def.outputs.task-definition }}
+  #         service: ${{ env.ECS_SERVICE }}
+  #         cluster: ${{ env.ECS_CLUSTER }}
+  #         wait-for-service-stability: true
+
+  build-and-deploy-on-azure:
     runs-on: ubuntu-latest
-    outputs:
-      image: ${{ steps.build-image.outputs.IMAGE }}
     steps:
-      - name: Check out repository code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      
+      - name: Build
+        run: dotnet build --configuration Release
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@0e613a0980cbf65ed5b322eb7a1e075d28913a83
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to ACR
+        uses: docker/login-action@v3
         with: 
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
+          registry: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io
+          username: ${{ secrets.AZURE_REGISTRY_USERNAME }}
+          password: ${{ secrets.AZURE_REGISTRY_PASSWORD }}
 
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@62f4f872db3836360b72999f4b87f1ff13310f3a
-
-      - name: Build, tag and push image to Amazon ECR
-        id: build-image
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          IMAGE_TAG: latest
-        run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
-
-      - name: Fill the image ID in the ECS task definition
-        id: task-def
-        uses: aws-actions/amazon-ecs-render-task-definition@c804dfbdd57f713b6c079302a4c01db7017a36fc
+      - name: Build and push container image to ACR
+        uses: docker/build-push-action@v6\
         with:
-          task-definition: ${{ env.ECS_TASK_DEFINITION }}
-          container-name: ${{ env.CONTAINER_NAME }}
-          image: ${{ steps.build-image.outputs.image }}
+          push: true
+          tags: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.CONTAINER_APP_NAME }}:${{ github.sha }}
+          file: ./Dockerfile
 
-      - name: Deploy ECS Task Definition
-        uses: aws-actions/amazon-ecs-deploy-task-definition@df9643053eda01f169e64a0e60233aacca83799a
+      - name: Azure Login
+        uses: azure/login@v2
         with:
-          task-definition: ${{ steps.task-def.outputs.task-definition }}
-          service: ${{ env.ECS_SERVICE }}
-          cluster: ${{ env.ECS_CLUSTER }}
-          wait-for-service-stability: true
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      
+      - name: Deploy to Azure Container Apps
+        uses: azure/container-apps-deploy-action@v1
+        with:
+          imageToDeploy: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.CONTAINER_APP_NAME }}:${{ github.sha }}
+          resourceGroup: ${{ env.RESOURCE_GROUP }}
+          containerAppName: ${{ env.CONTAINER_APP_NAME }}
+          environmentVariables: |
+            ConnectionStrings__DefaultConnection=conn_string 
