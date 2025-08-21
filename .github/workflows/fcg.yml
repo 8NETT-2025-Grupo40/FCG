@@ -195,7 +195,7 @@ jobs:
           
       - name: Log in to ACR
         run: |
-          ac azcr login --name ${{ secrets.REGISTRY_NAME }}
+          az acr login --name ${{ secrets.REGISTRY_NAME }}
 
       - name: Build and push container image to ACR
         run: |
