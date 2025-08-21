@@ -212,8 +212,8 @@ jobs:
             --name ${{ secrets.CONTAINERAPP_NAME }} \
             --resource-group ${{ secrets.RESOURCE_GROUP  }} \
             --image $IMAGE \
-            --set properties.template.scale.minReplicas=2 \
-                  properties.template.scale.maxReplicas=10 \
-                  properties.template.scale.rules[0].name=http-scaling \
-                  properties.template.scale.rules[0].custom.scaleType=http \
-                  properties.template.scale.rules[0].custom.metadata.concurrentRequests=50
+            --min-replicas 2 \
+            --max-replicas 10 \
+            --scale-rule-name http-scaling \
+            --scale-rule-type http \
+            --scale-rule-metadata concurrentRequests=50
