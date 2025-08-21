@@ -211,7 +211,7 @@ jobs:
           az containerapp update \
             --name ${{ secrets.CONTAINERAPP_NAME }} \
             --resource-group ${{ secrets.RESOURCE_GROUP  }} \
-            --image $IMAGE |
+            --image $IMAGE \
             --set properties.template.scale.minReplicas=2 \
                   properties.template.scale.maxReplicas=10 \
                   properties.template.scale.rules[0].name=http-scaling \
