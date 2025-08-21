@@ -177,6 +177,8 @@ jobs:
   #         wait-for-service-stability: true
 
   build-and-deploy-on-azure:
+    name: Build, publish and deploy on Azure
+    needs: [build, tests]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -185,10 +187,10 @@ jobs:
         with:
           dotnet-version: 8.0.x
       
-      - name: Build
+      - name: Build solution
         run: dotnet build --configuration Release
 
-      - name: Azure Login via Azure CLI
+      - name: Login to Azure
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
@@ -206,4 +208,12 @@ jobs:
 
       - name: Deploy to Azure Container Apps
         run: |
-          az containerapp update --name ${{ secrets.CONTAINERAPP_NAME }} --resource-group ${{ secrets.RESOURCE_GROUP  }} --image $IMAGE
+          az containerapp update \
+            --name ${{ secrets.CONTAINERAPP_NAME }} \
+            --resource-group ${{ secrets.RESOURCE_GROUP  }} \
+            --image $IMAGE |
+            --set properties.template.scale.minReplicas=2 \
+                  properties.template.scale.maxReplicas=10 \
+                  properties.template.scale.rules[0].name=http-scaling \
+                  properties.template.scale.rules[0].custom.scaleType=http \
+                  properties.template.scale.rules[0].custom.metadata.concurrentRequests=50
