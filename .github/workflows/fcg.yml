@@ -188,36 +188,22 @@ jobs:
       - name: Build
         run: dotnet build --configuration Release
 
-      # - name: Set up Docker Buildx
-      #   uses: docker/setup-buildx-action@v3
-          
-      - name: Log in to ACR
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io
-          username: ${{ secrets.AZURE_REGISTRY_USERNAME }}
-          password: ${{ secrets.AZURE_REGISTRY_PASSWORD }}
-
-      - name: Build and push container image to ACR
-        uses: docker/build-push-action@v6
-        with:
-          push: true
-          tags: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.CONTAINER_APP_NAME }}:${{ github.sha }}
-          file: ./Dockerfile
-
-
       - name: Azure Login via Azure CLI
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
+          
+      - name: Log in to ACR
+        run: |
+          ac azcr login --name ${{ secrets.REGISTRY_NAME }}
 
+      - name: Build and push container image to ACR
+        run: |
+          IMAGE=${{ secrets.REGISTRY_LOGIN_SERVER }}/fcgapi:${{ github.sha }}
+          docker build -t $IMAGE .
+          docker push $IMAGE
+          echo "IMAGE=$IMAGE" >> $GITHUB_ENV
 
       - name: Deploy to Azure Container Apps
-        uses: azure/container-apps-deploy-action@v1
-        with:
-          imageToDeploy: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.CONTAINER_APP_NAME }}:${{ github.sha }}
-          resourceGroup: ${{ env.RESOURCE_GROUP }}
-          containerAppName: ${{ env.CONTAINER_APP_NAME }}
-          acrName: FCGAzureContainerRegistry
-          environmentVariables: |
-            ConnectionStrings__DefaultConnection=conn_string 
+        run: |
+          az containerapp update --name ${{ secrets.CONTAINERAPP_NAME }} --resource-group ${{ secrets.RESOURCE_GROUP  }} --image $IMAGE
